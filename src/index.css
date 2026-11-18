@@ -33,6 +33,18 @@
   --border-dashed: #585b70;
 }
 
+/* Purple Dark Mode Theme */
+[data-theme="plum"] {
+  --bg-cream: #1e1e2e;
+  --card-bg: #28283d;
+  --ink: #cdd6f4;
+  --ink-muted: #9399b2;
+  --accent-pink: #cba6f7;
+  --accent-sage: #45475a;
+  --accent-latte: #313244;
+  --border-dashed: #585b70;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -52,7 +64,7 @@ body {
   max-width: 680px;
 }
 
-/* Header & ASCII Bunny */
+/* Header & ASCII Mascot */
 .ascii-header {
   display: flex;
   align-items: center;
@@ -150,6 +162,10 @@ body {
   width: 195px;
 }
 
+.new-course-form input:focus-visible {
+  background-color: var(--accent-latte);
+}
+
 .new-course-form button {
   font-family: inherit;
   font-size: 0.78rem;
@@ -208,7 +224,7 @@ body {
 .assignment-row input:focus {
   outline: none;
   border-color: var(--ink);
-  background: #fff;
+  background: var(--accent-latte);
 }
 
 .weight-input-wrapper {
@@ -290,6 +306,12 @@ body {
   padding: 0.4rem 0.6rem;
   border: 1.5px solid var(--ink);
   border-radius: 6px;
+  background-color: var(--bg-cream);
+  color: var(--ink)
+}
+
+.goal-input-group input:focus-visible {
+  background-color: (var(--accent-latte));
 }
 
 .ubc-badge {
