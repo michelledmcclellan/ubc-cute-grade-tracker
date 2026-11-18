@@ -1,0 +1,8 @@
+{
+    "name": "UBC Cute Grade Tracker",
+    "short_name": "Grades",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fdfaf6",
+    "theme_color": "#f4acb7"
+}
