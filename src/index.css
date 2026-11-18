@@ -1,0 +1,339 @@
+:root {
+  --bg-cream: #fdfaf6;
+  --card-bg: #ffffff;
+  --ink: #3d352e;
+  --ink-muted: #8c7f70;
+  --accent-pink: #f4acb7;
+  --accent-sage: #d8e2dc;
+  --accent-latte: #ffe5d9;
+  --border-dashed: #cbbcb1;
+}
+
+/* Matcha Latte Theme */
+[data-theme="matcha"] {
+  --bg-cream: #f4f7f4;
+  --card-bg: #ffffff;
+  --ink: #2b3a2e;
+  --ink-muted: #6b7f6e;
+  --accent-pink: #b7e4c7;
+  --accent-sage: #d8f3dc;
+  --accent-latte: #e9f5ec;
+  --border-dashed: #a3b8a8;
+}
+
+/* Cozy Midnight / Dark Mode Theme */
+[data-theme="midnight"] {
+  --bg-cream: #1e1e2e;
+  --card-bg: #28283d;
+  --ink: #cdd6f4;
+  --ink-muted: #9399b2;
+  --accent-pink: #cba6f7;
+  --accent-sage: #45475a;
+  --accent-latte: #313244;
+  --border-dashed: #585b70;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-cream);
+  color: var(--ink);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 680px;
+}
+
+/* Header & ASCII Bunny */
+.ascii-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  background: var(--card-bg);
+  border: 2px dashed var(--border-dashed);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.bunny-art {
+  font-size: 0.65rem;
+  line-height: 0.72rem;
+  margin: 0;
+  color: var(--ink);
+  user-select: none;
+}
+
+.header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.title-banner {
+  font-size: 0.85rem;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.speech-bubble {
+  background-color: var(--accent-latte);
+  border: 1.5px solid var(--ink);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+/* Course Tabs */
+.course-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  background: var(--accent-sage);
+  border: 1.5px solid var(--ink);
+  border-radius: 8px 8px 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.15s ease;
+}
+
+.tab.active {
+  background: var(--accent-pink);
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.delete-tab-btn {
+  background: none;
+  border: none;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 0.15rem;
+}
+
+.new-course-form {
+  display: flex;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.new-course-form input {
+  font-family: inherit;
+  font-size: 0.78rem;
+  padding: 0.35rem 0.6rem;
+  border: 1.5px dashed var(--border-dashed);
+  border-radius: 6px;
+  background: var(--card-bg);
+  width: 195px;
+}
+
+.new-course-form button {
+  font-family: inherit;
+  font-size: 0.78rem;
+  background: var(--ink);
+  color: var(--bg-cream);
+  border: none;
+  border-radius: 6px;
+  padding: 0.35rem 0.65rem;
+  cursor: pointer;
+}
+
+/* Calculator Card */
+.calculator-card {
+  background: var(--card-bg);
+  border: 2px solid var(--ink);
+  border-radius: 0 12px 12px 12px;
+  padding: 1.5rem;
+  box-shadow: 4px 4px 0px var(--border-dashed);
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 1fr 100px 110px 40px;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding-bottom: 0.5rem;
+  border-bottom: 1.5px dashed var(--border-dashed);
+  margin-bottom: 0.75rem;
+}
+
+.assignment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.assignment-row {
+  display: grid;
+  grid-template-columns: 1fr 100px 110px 40px;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.assignment-row input {
+  font-family: inherit;
+  font-size: 0.88rem;
+  padding: 0.45rem 0.6rem;
+  border: 1.5px solid var(--border-dashed);
+  border-radius: 6px;
+  background: var(--bg-cream);
+  color: var(--ink);
+  width: 100%;
+}
+
+.assignment-row input:focus {
+  outline: none;
+  border-color: var(--ink);
+  background: #fff;
+}
+
+.weight-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.percent-sign {
+  position: absolute;
+  right: 8px;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  pointer-events: none;
+}
+
+.remove-row-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.remove-row-btn:hover {
+  color: #d62828;
+}
+
+.add-row-btn {
+  margin-top: 0.85rem;
+  background: none;
+  border: 1.5px dashed var(--ink);
+  border-radius: 6px;
+  padding: 0.45rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.add-row-btn:hover {
+  background: var(--accent-latte);
+}
+
+.ascii-divider {
+  text-align: center;
+  color: var(--ink-muted);
+  margin: 1.25rem 0;
+  font-size: 0.85rem;
+  overflow: hidden;
+}
+
+/* Summary & Final Grade Planning */
+.summary-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.goal-box label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.goal-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.goal-input-group input {
+  width: 85px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.4rem 0.6rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+}
+
+.ubc-badge {
+  background: var(--accent-sage);
+  border: 1.5px solid var(--ink);
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.remaining-note {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  margin: 0.4rem 0 0 0;
+}
+
+.stats-readout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.stat-item {
+  background: var(--bg-cream);
+  border: 1.5px solid var(--border-dashed);
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-item.highlight {
+  background: var(--accent-latte);
+  border-color: var(--ink);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.stat-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
