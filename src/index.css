@@ -59,26 +59,26 @@
 
 /* Beige Light Mode Theme */
 [data-theme="latte"] {
-  --bg-cream: #f2ebf7;
-  --card-bg: #ffffff;
-  --ink: #716A8D;
-  --ink-muted: #ba99b2;
-  --accent-pink: #d7bff6;
-  --accent-sage: #FAEECD;
-  --accent-latte: #e3d1f5;
-  --border-dashed: #c7afe8;
+  --bg-cream: #ecdcd7;
+  --card-bg: #fdf2eb;
+  --ink: #8c5e4f;
+  --ink-muted: #c99988;
+  --accent-pink: #ddb695;
+  --accent-sage: #fff8f3;
+  --accent-latte: #f0d8c8;
+  --border-dashed: #b7887a;
 }
 
 /* Beige Dark Mode Theme */
 [data-theme="espresso"] {
-  --bg-cream: #f2ebf7;
-  --card-bg: #ffffff;
-  --ink: #716A8D;
-  --ink-muted: #ba99b2;
-  --accent-pink: #d7bff6;
-  --accent-sage: #FAEECD;
-  --accent-latte: #e3d1f5;
-  --border-dashed: #c7afe8;
+  --bg-cream: #291a15;
+  --card-bg: #573f3b;
+  --ink: #e2c6ab;
+  --ink-muted: #d3b79e;
+  --accent-pink: #825947;
+  --accent-sage: #8b5c4c;
+  --accent-latte: #b1816f;
+  --border-dashed: #b3887e;
 }
 
 * {
@@ -200,6 +200,7 @@ body {
   border-radius: 6px;
   background: var(--card-bg);
   width: 195px;
+  color: var(--ink)
 }
 
 .new-course-form input:focus-visible {
@@ -209,7 +210,7 @@ body {
 .new-course-form button {
   font-family: inherit;
   font-size: 0.78rem;
-  background: var(--ink);
+  background: var(--ink-muted);
   color: var(--bg-cream);
   border: none;
   border-radius: 6px;
@@ -287,7 +288,7 @@ body {
   border: 1.5px solid var(--ink-muted);
   border-radius: 8px;
   font-size: 0.55rem;
-  color: var(--ink);
+  color: var(--ink-muted);
 }
 
 .remove-row-btn {
@@ -420,4 +421,95 @@ body {
   border-radius: 6px;
   color: var(--ink-muted);
   width: 100%;
+}
+
+.dropdown-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.cozy-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.cozy-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink);
+  background-color: var(--bg-cream);
+  border: 1.5px solid var(--ink);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.cozy-dropdown-trigger:hover {
+  background-color: var(--accent-latte);
+}
+
+.cozy-dropdown-trigger[aria-expanded="true"] {
+  background-color: var(--accent-pink);
+}
+
+.cozy-dropdown-caret {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.cozy-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 100%;
+  width: max-content;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.35rem;
+  background-color: var(--card-bg);
+  border: 1.5px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 3px 3px 0px var(--border-dashed);
+}
+
+.cozy-dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.8rem;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.cozy-dropdown-option:hover {
+  background-color: var(--accent-latte);
+}
+
+.cozy-dropdown-option.selected {
+  background-color: var(--accent-sage);
+  font-weight: 700;
+}
+
+.cozy-dropdown-check {
+  width: 0.9rem;
+  text-align: center;
+  color: var(--ink);
 }

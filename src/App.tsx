@@ -7,6 +7,7 @@ import {
   calculateCourseStats,
 } from './grades';
 import './App.css';
+import { CozyDropdown, type DropdownMenuKey, type DropdownOption } from './Dropdown';
 
 const MASCOTS: Record<string, string> = {
   bunny: `⠀⠀⠀⠀⠀⠀⢀⡴⢲⡄⠀⠀⠀⢀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -63,7 +64,20 @@ const MASCOTS: Record<string, string> = {
 ⢀⣤⣼⣇⠈⠠⠤⠄⠊⠀⠑⠤⢠⣃⣠⠴⢛⡿⠋⠀⠀⠀⠀
 ⠸⢤⣄⣈⡓⡦⠤⠤⠤⠴⠖⠚⠋⠉⠀⢸⡍⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠈⠉⠉⠛⠛⠒⢷⠀⠀⠀⠀⠀⠀⢷⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⢘⡃⠀⠀⠀⠀⠀⠘⡃⠀⠀⠀⠀⠀`
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢘⡃⠀⠀⠀⠀⠀⠘⡃⠀⠀⠀⠀⠀`,
+  sleepyPanda: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⡿⣿⠟⢿⡯⣿⢫⡗⣴⣿⣿⡇
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⢿⣶⣾⣦⣾⣷⣿⣶⣷⣾⠿⠋⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⡉⠉⠉⠉⠉⠉⠁⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣤⣄⣠⠤⠴⠞⠓⠶⠤⣶⣶⣶⡄⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⡟⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⡻⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢳⠀⠀⠀⠀⠀
+⠀⠀⢰⣾⣿⣷⡤⢴⠁⠀⠀⣠⣴⣶⣦⣄⠀⠀⠀⢠⣾⣿⣿⡄⠀⠀⠀⠀
+⠀⠀⠘⣿⠋⠁⠀⣿⠀⠀⢸⣿⣿⣟⣻⣿⠇⠀⠀⠘⢿⣯⣽⣿⣆⠀⠀⠀
+⠀⠀⢰⠃⠀⠀⠀⢻⠀⠀⠀⠻⠿⠿⠿⠋⠀⠀⠻⠛⠀⠉⠉⠁⣸⠀⠀⠀
+⣴⣶⣼⡀⠀⠀⠀⣼⣿⣷⣶⣤⣤⣤⣤⡀⠀⠀⠀⠀⠀⠀⣀⣴⣧⡀⠀⠀
+⠻⠿⠿⠷⠤⠤⠤⠿⠿⠿⠿⠿⠿⠿⢿⣇⠤⠤⠤⠴⠶⠿⠿⠿⠿⠁⠀⠀`
 
 }
 
@@ -72,13 +86,32 @@ export default function App() {
   const [courses, setCourses] = useState<Course[]>(() => loadCourses());
   const [activeCourseId, setActiveCourseId] = useState<string>(courses[0]?.id || '');
   const [newCourseName, setNewCourseName] = useState('');
+  const [openMenu, setOpenMenu] = useState<DropdownMenuKey>(null);
+
+  const THEME_OPTIONS: DropdownOption<string>[] = [
+    { value: '', label: 'Strawberry' },
+    { value: 'matcha', label: 'Matcha Latte' },
+    { value: 'midnight', label: 'Midnight' },
+    { value: 'cosmic', label: 'Cosmic Purple' },
+    { value: 'lilac', label: 'Lilac Light' },
+    { value: 'latte', label: 'Creme Latte' },
+    { value: 'espresso', label: 'Espresso Dark' },
+  ];
+
+  const MASCOT_OPTIONS: DropdownOption<string>[] = [
+    { value: 'bunny', label: 'Bunny' },
+    { value: 'cat', label: 'Cat' },
+    { value: 'panda', label: 'Panda' },
+    { value: 'turtle', label: 'Turtle' },
+    { value: 'toro', label: 'Toro' },
+    { value: 'sleepyPanda', label: 'Sleepy Panda' }
+  ];
 
   // added mascot funcitonality
   const [mascot, setMascot] = useState<string>(
     () => localStorage.getItem('ubc_mascot') || 'bunny'
   )
 
-  const THEMES = ['strawberry', 'matcha', 'midnight', 'lilac', 'cosmic'];
   const [theme, setTheme] = useState<string>(
     () => localStorage.getItem('ubc_theme') || 'strawberry'
   );
@@ -88,10 +121,7 @@ export default function App() {
     localStorage.setItem('ubc_theme', theme);
   }, [theme]);
 
-  const cycleTheme = () => {
-    const next = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
-    setTheme(next);
-  };
+
 
   const cycleMascot = () => {
     const keys = Object.keys(MASCOTS);
@@ -230,12 +260,27 @@ export default function App() {
             {getBunnyMessage()}
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button onClick={cycleTheme} className="add-row-btn" style={{ marginTop: 0 }}>
-              ✐⋆.ೃ࿔*:･ theme: {theme}
-            </button>
-            <button onClick={cycleMascot} className="add-row-btn" style={{ marginTop: 0 }}>
-              ⋆˚🐾˖° pet: {mascot}
-            </button>
+            <div className="dropdown-toolbar">
+              <CozyDropdown
+                menuKey="theme"
+                openMenu={openMenu}
+                setOpenMenu={setOpenMenu}
+                value={theme}
+                options={THEME_OPTIONS}
+                onChange={setTheme}
+                prefixLabel="theme"
+              />
+
+              <CozyDropdown
+                menuKey="mascot"
+                openMenu={openMenu}
+                setOpenMenu={setOpenMenu}
+                value={mascot}
+                options={MASCOT_OPTIONS}
+                onChange={setMascot}
+                prefixLabel="mascot"
+              />
+            </div>
           </div>
         </div>
       </header>
