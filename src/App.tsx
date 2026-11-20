@@ -29,12 +29,17 @@ const MASCOTS: Record<string, string> = {
 ⠀⠀⣸⠟⠀⠀⠀⠈⠳⣠⣀⠀⠀⠀⠀⠀⠀⠀⡀⣀⣴⠞⠁⠀⠀⠀⢻⡆⠀⠀
 ⠀⠀⠉⠶⠖⠆⠀⠀⢰⠞⠉⠠⠛⠓⢤⠀⣰⠞⠂⠘⢦⡀⠀⠀⠘⠛⠛⠃⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⢀⡟⠀⠀⣤⣤⣴⠛⠀⣿⣀⣤⠀⠈⠷⠀⠀⠀⠀⠀⠀⠀⠀`,
-  panda: `⠀⠀⠀⠀⠀⢀⣴⣶⣦⡄⢀⣀⣀⣀⣀⣀⢀⣴⣶⣦⣄⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⣿⣿⣿⠟⠉⠀⠀⠀⠀⠀⠀⠉⠛⢿⣿⣿⡄⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠙⠿⠁⠀⣠⣤⡄⠀⠀⢠⣤⣄⠀⠈⢿⠟⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠇⠀⢸⣿⣿⠳⣶⣶⡞⢿⣿⡇⢠⣼⢶⢶⣤⡀⠀⠀
-⠀⠀⢀⣾⣿⣿⣿⣦⠈⠛⠋⠐⠤⠣⠀⠘⠛⠁⢿⡽⠛⠛⣼⡇⠀⠀
-⠉⠉⠙⠿⢿⣿⡿⠟⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉`,
+  panda: `⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢰⣿⡿⠗⠀⠠⠄⡀⠀⠀⠀⠀
+⠀⠀⠀⠀⡜⢁⣀⡀⠀⠀⠀⠈⠑⢶⣶⡄
+⢀⣶⣦⣸⠈⢿⣟⡇⠀⠀⣀⣀⠀⠘⡿⠃
+⠀⢿⣿⣿⣄⠒⠀⠠⢶⡂⢫⣿⢇⢀⠃⠀
+⠀⠈⢿⡿⣿⣿⣶⣤⣀⣄⣀⣂⡠⠊⠀⠀
+⠀⠀⠀⡇⠀⠀⠉⠙⠛⠿⣿⣿⣧⠀⠀⠀
+⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠘⣿⣿⡇⠀⠀
+⠀⠀⠀⣿⣧⡤⠄⣀⣀⣀⣴⡟⠿⠃⠀⠀
+⠀⠀⠀⢻⣿⣿⠉⠉⢹⣿⣿⠁⠀⠀⠀⠀
+⠀⠀⠀⠀⠉⠁⠀⠀⠀⠉⠁⠀⠀⠀⠀⠀`,
   turtle: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠘⠦⠼⠃⠀⠀⠀⠀⡠⠖⠚⠒⢦⡀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⡫⡤⠀⠀⡤⡧⠀⠀⠀⠀⠀⠀
@@ -173,6 +178,16 @@ export default function App() {
     }
   };
 
+  // Toggle visibility of your grades
+  const handleToggleVisibility = (id: string) => {
+    updateActiveCourse((course) => ({
+      ...course,
+      assignments: course.assignments.map((row) =>
+        row.id === id ? { ...row, isHidden: !row.isHidden } : row
+      ),
+    }));
+  };
+
   // Cute bunny reaction message based on stats
   const getBunnyMessage = () => {
     if (!stats.hasGrades) return 'type in some grades & weights to start! ⋆｡°✩';
@@ -271,6 +286,7 @@ export default function App() {
 
         <div className="assignment-list">
           {activeCourse.assignments.map((row) => (
+
             <div key={row.id} className="assignment-row">
               <input
                 type="text"
@@ -280,14 +296,18 @@ export default function App() {
                   handleAssignmentChange(row.id, 'name', e.target.value)
                 }
               />
-              <input
-                type="number"
-                placeholder="--"
-                value={row.grade}
-                onChange={(e) =>
-                  handleAssignmentChange(row.id, 'grade', e.target.value)
-                }
-              />
+              {row.isHidden ? (
+                <span className="hidden-grade-mask" aria-label="Grade hidden">
+                  ⟢ ฅ՞•ﻌ•՞ฅ
+                </span>
+              ) : (
+                <input
+                  type="number"
+                  placeholder="--"
+                  value={row.grade}
+                  onChange={(e) => handleAssignmentChange(row.id, 'grade', e.target.value)}
+                />
+              )}
               <div className="weight-input-wrapper">
                 <input
                   type="number"
@@ -300,6 +320,16 @@ export default function App() {
                 <span className="percent-sign">%</span>
               </div>
               <button
+                type="button"
+                className="visibility-btn"
+                onClick={() => handleToggleVisibility(row.id)}
+                aria-pressed={Boolean(row.isHidden)}
+                aria-label={row.isHidden ? `Show grade for ${row.name || 'assignment'}` : `Hide grade for ${row.name || 'assignment'}`}
+                title={row.isHidden ? 'Show grade' : 'Hide grade'}
+              >
+                {row.isHidden ? '(ᴗ_ ᴗ。)' : '(◉_ ◉。)'}
+              </button>
+              <button
                 className="remove-row-btn"
                 onClick={() => handleDeleteRow(row.id)}
                 title="Remove row"
@@ -307,6 +337,7 @@ export default function App() {
                 [x]
               </button>
             </div>
+
           ))}
         </div>
 

@@ -4,6 +4,7 @@ export interface Assignment {
     name: string;
     grade: string; // Stored as string so empty input boxes work smoothly
     weight: string;
+    isHidden?: boolean;
 }
 
 export interface Course {
