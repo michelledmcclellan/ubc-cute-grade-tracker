@@ -341,18 +341,19 @@ export default function App() {
                   handleAssignmentChange(row.id, 'name', e.target.value)
                 }
               />
-              {row.isHidden ? (
-                <span className="hidden-grade-mask" aria-label="Grade hidden">
-                  ⟢ ฅ՞•ﻌ•՞ฅ
-                </span>
-              ) : (
-                <input
-                  type="number"
-                  placeholder="--"
-                  value={row.grade}
-                  onChange={(e) => handleAssignmentChange(row.id, 'grade', e.target.value)}
-                />
-              )}
+              <input
+                type={row.isHidden ? 'text' : 'number'}
+                className={row.isHidden ? 'is-hidden' : ''}
+                placeholder="--"
+                readOnly={Boolean(row.isHidden)}
+                aria-label={row.isHidden ? 'Grade hidden' : 'Grade percentage'}
+                value={row.isHidden ? '⟢ ฅ՞•ﻌ•՞ฅ' : row.grade}
+                onChange={(e) => {
+                  if (!row.isHidden) {
+                    handleAssignmentChange(row.id, 'grade', e.target.value);
+                  }
+                }}
+              />
               <div className="weight-input-wrapper">
                 <input
                   type="number"
