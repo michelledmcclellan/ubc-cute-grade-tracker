@@ -5,6 +5,8 @@ export interface Assignment {
     grade: string; // Stored as string so empty input boxes work smoothly
     weight: string;
     isHidden?: boolean;
+    subItems?: SubItem[];
+    dropLowest?: number; // add a best case vs assuming these courses are kept (drops your current lowest, and then assumes your lowest are still kept when you have not finished yet)
 }
 
 export interface Course {
@@ -12,22 +14,100 @@ export interface Course {
     code: string;
     goalGrade: number;
     assignments: Assignment[];
+    gradingScheme?: GradeTier[];
+}
+
+// functionality for a custom grade scheme
+export interface GradeTier {
+    letter: string // A+,, A, A-, B, C, etc, required
+    min: number; // range, for ex 90, required
+    gpa?: number; // number gpa for a given letter, optional in case some dont track gpa
+}
+
+// functionality for subcategories of items
+export interface SubItem {
+    id: string;
+    name: string;
+    grade: string;
+    isHidden?: boolean;
 }
 
 // 2. UBC Official Grading Scale Lookup
-export function getUBCLetterGrade(percentage: number): { letter: string; gpa: number } {
-    const p = Math.round(percentage);
-    if (p >= 90) return { letter: 'A+', gpa: 4.33 };
-    if (p >= 85) return { letter: 'A', gpa: 4.00 };
-    if (p >= 80) return { letter: 'A-', gpa: 3.67 };
-    if (p >= 76) return { letter: 'B+', gpa: 3.33 };
-    if (p >= 72) return { letter: 'B', gpa: 3.00 };
-    if (p >= 68) return { letter: 'B-', gpa: 2.67 };
-    if (p >= 64) return { letter: 'C+', gpa: 2.33 };
-    if (p >= 60) return { letter: 'C', gpa: 2.00 };
-    if (p >= 55) return { letter: 'C-', gpa: 1.67 };
-    if (p >= 50) return { letter: 'D', gpa: 1.00 };
-    return { letter: 'F', gpa: 0.00 };
+// made the ubc scale a default object when I expanded this to have custom grade schemes
+export const DEFAULT_UBC_SCALE: GradeTier[] = [
+    { letter: "A+", min: 90, gpa: 4.33 },
+    { letter: "A", min: 85, gpa: 4.00 },
+    { letter: "A-", min: 80, gpa: 3.67 },
+    { letter: "B+", min: 76, gpa: 3.33 },
+    { letter: "B", min: 72, gpa: 3.00 },
+    { letter: "B-", min: 68, gpa: 2.67 },
+    { letter: "C+", min: 64, gpa: 2.33 },
+    { letter: "C", min: 60, gpa: 2.00 },
+    { letter: "C-", min: 55, gpa: 1.67 },
+    { letter: "D", min: 50, gpa: 1.00 },
+    { letter: "F", min: 0, gpa: 0.00 }
+]
+
+export function letterGradeLookup(percentage: number, scheme: GradeTier[] = DEFAULT_UBC_SCALE): { letter: string; gpa?: number } {
+    const rounded = Math.round(percentage);
+    const tier = scheme.find((tier: GradeTier) => rounded >= tier.min);
+    if (tier) {
+        if (!tier.gpa) return { letter: tier.letter }
+        return { letter: tier.letter, gpa: tier.gpa }
+    } else {
+        const last = scheme[scheme.length - 1];
+        if (!last.gpa) return { letter: last.letter }
+        return { letter: last.letter, gpa: last.gpa }
+    }
+}
+
+export function calculateSubcategoryStats(assignment: Assignment): {
+    earnedPoints: number;
+    completedWeight: number;
+    average: number | null;
+    countedCount: number;
+} {
+    const totalWeight: number = parseFloat(assignment.weight);
+    const items: SubItem[] = assignment.subItems ?? [];
+    if (items.length === 0 || isNaN(totalWeight) || totalWeight <= 0) {
+        return { earnedPoints: 0, completedWeight: 0, average: null, countedCount: 0 };
+    }
+
+    const dropCount: number = Math.max(
+        0,
+        Math.min(assignment.dropLowest ?? 0, items.length - 1)
+    );
+    const targetCount = Math.max(1, items.length - dropCount);
+    const weightPerItem = totalWeight / targetCount;
+
+    // 1. Extract valid numeric grades (ignores blank "", keeps "0")
+    const validGrades = items
+        .map((item) => parseFloat(item.grade))
+        .filter((g) => !isNaN(g));
+
+    if (validGrades.length === 0) {
+        return { earnedPoints: 0, completedWeight: 0, average: null, countedCount: 0 };
+    }
+
+    // 2. Sort ascending so the lowest grades are at the front
+    validGrades.sort((a, b) => a - b);
+
+    // 3. Only drop once we have more graded items than dropCount
+    const countedGrades =
+        validGrades.length > dropCount ? validGrades.slice(dropCount) : validGrades;
+
+    // 4. Compute final stats from the counted grades
+    const sum = countedGrades.reduce((acc, g) => acc + g, 0);
+    const average = sum / countedGrades.length;
+    const completedWeight = Math.min(totalWeight, countedGrades.length * weightPerItem);
+    const earnedPoints = (average * completedWeight) / 100;
+
+    return {
+        earnedPoints,
+        completedWeight,
+        average,
+        countedCount: countedGrades.length,
+    };
 }
 
 // 3. Weighted Grade Math
@@ -36,13 +116,18 @@ export function calculateCourseStats(course: Course) {
     let completedWeight = 0;
 
     for (const a of course.assignments) {
-        const g = parseFloat(a.grade);
-        const w = parseFloat(a.weight);
+        if (a.subItems && a.subItems.length > 0) {
+            const subStats = calculateSubcategoryStats(a);
+            earnedPoints += subStats.earnedPoints;
+            completedWeight += subStats.completedWeight;
+        } else {
+            const g = parseFloat(a.grade);
+            const w = parseFloat(a.weight);
 
-        // Only count rows where both grade and weight are valid numbers
-        if (!isNaN(g) && !isNaN(w) && w > 0) {
-            earnedPoints += (g * w) / 100;
-            completedWeight += w;
+            if (!isNaN(g) && !isNaN(w) && w > 0) {
+                earnedPoints += (g * w) / 100;
+                completedWeight += w;
+            }
         }
     }
 
@@ -60,8 +145,8 @@ export function calculateCourseStats(course: Course) {
         remainingWeight,
         requiredOnRemaining,
         hasGrades: completedWeight > 0,
-        ubcCurrent: getUBCLetterGrade(currentAverage),
-        ubcGoal: getUBCLetterGrade(course.goalGrade),
+        ubcCurrent: letterGradeLookup(currentAverage, course.gradingScheme),
+        ubcGoal: letterGradeLookup(course.goalGrade, course.gradingScheme),
     };
 }
 

@@ -7,79 +7,9 @@ import {
   calculateCourseStats,
 } from './grades';
 import './App.css';
-import { CozyDropdown, type DropdownMenuKey, type DropdownOption } from './Dropdown';
-
-const MASCOTS: Record<string, string> = {
-  bunny: `⠀⠀⠀⠀⠀⠀⢀⡴⢲⡄⠀⠀⠀⢀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢀⡞⠀⠀⡇⠀⢀⡴⠋⠁⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⣸⠁⠀⠀⡇⣠⠟⠀⠀⠀⣼⣠⣤⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⣿⠀⢠⢤⡿⠃⣀⠀⢀⡞⠉⠁⠀⠀⠈⠙⠶⡄⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⣻⣰⡏⣼⢁⡴⠋⣰⠋⠀⠀⠀⠀⠀⠀⠀⠀⠹⡄⣀⡀⠀⠀⠀⠀
-⠀⠀⠀⢀⡾⠋⠉⠁⠀⠙⠁⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡈⢷⠀⠀⠀⠀
-⠀⠀⠀⣼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠀⠀⠀⠀⠀⠀⠀⢀⣧⡾⠁⠀⠀⠀
-⠀⠀⠀⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠀⠀⠀⠀⠀⠀⠀⣾⠃⠀⠀⠀⠀⠀
-⠀⠀⠀⣹⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠁⠀⠀⡀⠀⠀⢰⡾⠋⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⢻⡇⣀⡀⠀⠺⣿⠇⠀⣀⣤⣄⣀⣠⣬⣥⣤⠾⠛⠁⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠉⠛⠓⠂⠤⠤⠖⠊⠉⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`,
-  cat: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠤⠤⠤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠣⣀⣀⣀⠜⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⣠⡶⠒⠶⢦⣄⠀⠀⠀⠀⣾⠓⢆⠀⠀⠀⠀⣠⡞⠹⡆⠀⠀⢀⣤⠶⠛⠙⢶⣤
-⠹⢆⠀⠀⠀⠉⠳⠦⠀⣼⠇⠀⠊⠙⠉⠋⠙⠉⡠⠀⢷⠀⠴⠋⠀⠀⠀⢀⡼⠋
-⠀⠀⢳⡄⠀⠀⠀⢀⣴⠟⠀⣴⣧⠀⠀⠀⠀⣼⣦⠀⠈⢷⡀⠀⠀⠀⠴⡏⠁⠀
-⠀⠀⣟⡁⠀⠀⠀⢸⠇⠀⠀⢻⠏⠀⠀⠀⠀⠻⡟⠀⠀⠈⡧⠀⠀⠀⣈⣿⠀⠀
-⠀⠀⣸⠟⠀⠀⠀⠈⠳⣠⣀⠀⠀⠀⠀⠀⠀⠀⡀⣀⣴⠞⠁⠀⠀⠀⢻⡆⠀⠀
-⠀⠀⠉⠶⠖⠆⠀⠀⢰⠞⠉⠠⠛⠓⢤⠀⣰⠞⠂⠘⢦⡀⠀⠀⠘⠛⠛⠃⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⢀⡟⠀⠀⣤⣤⣴⠛⠀⣿⣀⣤⠀⠈⠷⠀⠀⠀⠀⠀⠀⠀⠀`,
-  panda: `⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⢰⣿⡿⠗⠀⠠⠄⡀⠀⠀⠀⠀
-⠀⠀⠀⠀⡜⢁⣀⡀⠀⠀⠀⠈⠑⢶⣶⡄
-⢀⣶⣦⣸⠈⢿⣟⡇⠀⠀⣀⣀⠀⠘⡿⠃
-⠀⢿⣿⣿⣄⠒⠀⠠⢶⡂⢫⣿⢇⢀⠃⠀
-⠀⠈⢿⡿⣿⣿⣶⣤⣀⣄⣀⣂⡠⠊⠀⠀
-⠀⠀⠀⡇⠀⠀⠉⠙⠛⠿⣿⣿⣧⠀⠀⠀
-⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠘⣿⣿⡇⠀⠀
-⠀⠀⠀⣿⣧⡤⠄⣀⣀⣀⣴⡟⠿⠃⠀⠀
-⠀⠀⠀⢻⣿⣿⠉⠉⢹⣿⣿⠁⠀⠀⠀⠀
-⠀⠀⠀⠀⠉⠁⠀⠀⠀⠉⠁⠀⠀⠀⠀⠀`,
-  turtle: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠘⠦⠼⠃⠀⠀⠀⠀⡠⠖⠚⠒⢦⡀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⡫⡤⠀⠀⡤⡧⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢀⣠⠔⠊⣉⣭⣶⣶⣷⣶⣦⡀⠀⢀⡴⠋⠀⠀⣠⠴⢤⡀
-⠀⠀⠀⠀⠀⠸⠥⢟⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⡰⠋⠀⠀⠀⠀⣇⠶⣧⠇
-⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣟⣿⣟⣿⣽⣿⣿⡧⡄⠀⠀⠀⠀⠈⠉⠁⠀
-⠠⠦⢠⠖⠂⣾⣿⣿⣿⣿⣻⣷⢿⢿⣿⣿⣿⣿⠇⠙⣆⠀⠀⠀⠀⠀⠀⠀
-⠀⣔⠳⣂⡤⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡋⠀⠀⢻⠀⠀⠀⠀⠀⠀⠀
-⠀⠈⠉⣁⠀⠀⠛⠿⣿⣿⣿⣿⣿⡿⠿⠃⣸⠏⠃⢀⡯⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⣰⠊⠉⠉⠀⡜⠀⠀⠰⡗⣋⢀⡾⠁⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠰⣇⡶⡀⠆⣰⠏⠀⠀⠘⣧⡵⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠙⠚⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`,
-  toro: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠻⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⡶⢤⡀⠀⠀⠀⢀⡇⡄⠈⢳⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⢠⡇⡄⢙⢦⣀⣀⣼⠁⠂⠀⠀⠙⢦⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠘⡇⡇⠀⠁⡍⠁⠀⠀⠈⠁⠂⠀⢈⠳⡄⠀⠀⠀⠀⠀⠀
-⠀⠰⡇⢀⠀⡐⠁⠀⠀⠀⠀⠀⢀⡴⣋⡄⠹⣆⠀⠀⠀⠀⠀
-⠀⠀⣗⠈⢅⣀⣀⣀⡀⠀⠀⠀⠛⠛⠤⠤⠤⡸⣆⣠⠟⢲⡄
-⠀⠀⣿⠀⠰⠒⣺⠟⠁⢀⣠⠤⠶⡄⡁⠀⢀⠆⢹⠁⣠⠞⠁
-⠀⠀⢻⡀⢀⠞⠑⠒⢄⢣⡀⠀⠀⡇⠈⠉⠀⣠⣾⡜⠃⠀⠀
-⢀⣤⣼⣇⠈⠠⠤⠄⠊⠀⠑⠤⢠⣃⣠⠴⢛⡿⠋⠀⠀⠀⠀
-⠸⢤⣄⣈⡓⡦⠤⠤⠤⠴⠖⠚⠋⠉⠀⢸⡍⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠈⠉⠉⠛⠛⠒⢷⠀⠀⠀⠀⠀⠀⢷⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⢘⡃⠀⠀⠀⠀⠀⠘⡃⠀⠀⠀⠀⠀`,
-  sleepyPanda: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⡿⣿⠟⢿⡯⣿⢫⡗⣴⣿⣿⡇
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⢿⣶⣾⣦⣾⣷⣿⣶⣷⣾⠿⠋⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⡉⠉⠉⠉⠉⠉⠁⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣤⣄⣠⠤⠴⠞⠓⠶⠤⣶⣶⣶⡄⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⡟⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⡻⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢳⠀⠀⠀⠀⠀
-⠀⠀⢰⣾⣿⣷⡤⢴⠁⠀⠀⣠⣴⣶⣦⣄⠀⠀⠀⢠⣾⣿⣿⡄⠀⠀⠀⠀
-⠀⠀⠘⣿⠋⠁⠀⣿⠀⠀⢸⣿⣿⣟⣻⣿⠇⠀⠀⠘⢿⣯⣽⣿⣆⠀⠀⠀
-⠀⠀⢰⠃⠀⠀⠀⢻⠀⠀⠀⠻⠿⠿⠿⠋⠀⠀⠻⠛⠀⠉⠉⠁⣸⠀⠀⠀
-⣴⣶⣼⡀⠀⠀⠀⣼⣿⣷⣶⣤⣤⣤⣤⡀⠀⠀⠀⠀⠀⠀⣀⣴⣧⡀⠀⠀
-⠻⠿⠿⠷⠤⠤⠤⠿⠿⠿⠿⠿⠿⠿⢿⣇⠤⠤⠤⠴⠶⠿⠿⠿⠿⠁⠀⠀`
-
-}
+import { CozyDropdown, type DropdownMenuKey } from './components/Dropdown';
+import { MASCOT_OPTIONS, MASCOTS, THEME_OPTIONS } from './constants';
+import { AssignmentRow } from './components/AssignmentRow';
 
 export default function App() {
   // 1. State: Load courses from localStorage when app opens
@@ -88,32 +18,16 @@ export default function App() {
   const [newCourseName, setNewCourseName] = useState('');
   const [openMenu, setOpenMenu] = useState<DropdownMenuKey>(null);
 
-  const THEME_OPTIONS: DropdownOption<string>[] = [
-    { value: '', label: 'Strawberry' },
-    { value: 'matcha', label: 'Matcha Latte' },
-    { value: 'midnight', label: 'Midnight' },
-    { value: 'cosmic', label: 'Cosmic Purple' },
-    { value: 'lilac', label: 'Lilac Light' },
-    { value: 'latte', label: 'Creme Latte' },
-    { value: 'espresso', label: 'Espresso Dark' },
-  ];
-
-  const MASCOT_OPTIONS: DropdownOption<string>[] = [
-    { value: 'bunny', label: 'Bunny' },
-    { value: 'cat', label: 'Cat' },
-    { value: 'panda', label: 'Panda' },
-    { value: 'turtle', label: 'Turtle' },
-    { value: 'toro', label: 'Toro' },
-    { value: 'sleepyPanda', label: 'Sleepy Panda' }
-  ];
-
   // added mascot funcitonality
   const [mascot, setMascot] = useState<string>(
     () => localStorage.getItem('ubc_mascot') || 'bunny'
   )
+  useEffect(() => {
+    localStorage.setItem('ubc_mascot', mascot);
+  }, [mascot]);
 
   const [theme, setTheme] = useState<string>(
-    () => localStorage.getItem('ubc_theme') || 'strawberry'
+    () => localStorage.getItem('ubc_theme') || ''
   );
 
   useEffect(() => {
@@ -176,6 +90,16 @@ export default function App() {
     updateActiveCourse((course) => ({
       ...course,
       assignments: course.assignments.filter((a) => a.id !== id),
+    }));
+  };
+
+  // Update an assignment row
+  const handleUpdateRow = (updatedRow: Assignment) => {
+    updateActiveCourse((course) => ({
+      ...course,
+      assignments: course.assignments.map((a) =>
+        a.id === updatedRow.id ? updatedRow : a
+      ),
     }));
   };
 
@@ -331,58 +255,14 @@ export default function App() {
 
         <div className="assignment-list">
           {activeCourse.assignments.map((row) => (
-
-            <div key={row.id} className="assignment-row">
-              <input
-                type="text"
-                placeholder="e.g. Midterm 1"
-                value={row.name}
-                onChange={(e) =>
-                  handleAssignmentChange(row.id, 'name', e.target.value)
-                }
-              />
-              <input
-                type={row.isHidden ? 'text' : 'number'}
-                className={row.isHidden ? 'is-hidden' : ''}
-                placeholder="--"
-                readOnly={Boolean(row.isHidden)}
-                aria-label={row.isHidden ? 'Grade hidden' : 'Grade percentage'}
-                value={row.isHidden ? '⟢ ฅ՞•ﻌ•՞ฅ' : row.grade}
-                onChange={(e) => {
-                  if (!row.isHidden) {
-                    handleAssignmentChange(row.id, 'grade', e.target.value);
-                  }
-                }}
-              />
-              <div className="weight-input-wrapper">
-                <input
-                  type="number"
-                  placeholder="0"
-                  value={row.weight}
-                  onChange={(e) =>
-                    handleAssignmentChange(row.id, 'weight', e.target.value)
-                  }
-                />
-                <span className="percent-sign">%</span>
-              </div>
-              <button
-                type="button"
-                className="visibility-btn"
-                onClick={() => handleToggleVisibility(row.id)}
-                aria-pressed={Boolean(row.isHidden)}
-                aria-label={row.isHidden ? `Show grade for ${row.name || 'assignment'}` : `Hide grade for ${row.name || 'assignment'}`}
-                title={row.isHidden ? 'Show grade' : 'Hide grade'}
-              >
-                {row.isHidden ? '(ᴗ_ ᴗ。)' : '(◉_ ◉。)'}
-              </button>
-              <button
-                className="remove-row-btn"
-                onClick={() => handleDeleteRow(row.id)}
-                title="Remove row"
-              >
-                [x]
-              </button>
-            </div>
+            <AssignmentRow
+              key={row.id}
+              row={row}
+              onChange={handleAssignmentChange}
+              onToggleVisibility={handleToggleVisibility}
+              onDelete={handleDeleteRow}
+              onUpdateRow={handleUpdateRow}
+            />
 
           ))}
         </div>
@@ -414,7 +294,7 @@ export default function App() {
                 }
               />
               <span className="ubc-badge">
-                UBC {stats.ubcGoal.letter} ({stats.ubcGoal.gpa.toFixed(2)} GPA)
+                UBC {stats.ubcGoal.letter} {stats.ubcGoal.gpa !== undefined && ` (${stats.ubcGoal.gpa.toFixed(2)} GPA)`}
               </span>
             </div>
             <p className="remaining-note">
