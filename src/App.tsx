@@ -149,7 +149,7 @@ export default function App() {
       return `course complete!! final mark: ${stats.currentAverage.toFixed(1)}% (${stats.ubcCurrent.letter}) ★`;
     }
     if (stats.requiredOnRemaining > 100) {
-      return `eep! you'd need ${stats.requiredOnRemaining.toFixed(1)}% on the remaining ${stats.remainingWeight}%... maybe adjust your goal? (｡•́︿•̀｡)`;
+      return `eep! you'd need ${stats.requiredOnRemaining.toFixed(1)}% on the remaining ${stats.remainingWeight.toFixed(1)}%... maybe adjust your goal? (｡•́︿•̀｡)`;
     }
     if (stats.requiredOnRemaining <= 0) {
       return `you already locked in ${activeCourse.goalGrade}% (${stats.ubcGoal.letter}) even with 0% on the rest!! ⸜(｡˃ ᵕ ˂ )⸝♡`;
@@ -157,7 +157,7 @@ export default function App() {
     if (stats.currentAverage >= 90) {
       return `wow!! your average is ${stats.currentAverage.toFixed(1)}%?!? great job ദ്ദി ˉ͈̀꒳ˉ͈́ )✧`;
     }
-    return `you got this!! you need ${stats.requiredOnRemaining.toFixed(1)}% on the remaining ${stats.remainingWeight}% to hit ${activeCourse.goalGrade}% (${stats.ubcGoal.letter}) (๑°꒵°๑)･*♡`;
+    return `you got this!! you need ${stats.requiredOnRemaining.toFixed(1)}% on the remaining ${stats.remainingWeight.toFixed(1)}% to hit ${activeCourse.goalGrade.toFixed(1)}% (${stats.ubcGoal.letter}) (๑°꒵°๑)･*♡`;
   };
 
   return (
