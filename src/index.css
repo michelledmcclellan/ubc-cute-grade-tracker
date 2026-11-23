@@ -518,3 +518,130 @@ body {
   text-align: center;
   color: var(--ink);
 }
+
+/* Wrapper holding both the main row and its expandable drawer */
+.assignment-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Column 1: Keeps the ▸ toggle button and name input inside one grid cell */
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.name-cell input {
+  flex: 1;
+  min-width: 0;
+  /* Prevents flex input from overflowing the 1fr grid column */
+}
+
+.expand-btn {
+  background: none;
+  border: none;
+  color: var(--ink-muted);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0 0.2rem;
+  transition: color 0.15s ease;
+}
+
+.expand-btn:hover {
+  color: var(--ink);
+}
+
+/* The indented terminal-tree drawer */
+.subcategory-drawer {
+  margin-left: 1.25rem;
+  margin-top: 0.45rem;
+  padding-left: 0.85rem;
+  border-left: 2px dashed var(--border-dashed);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+/* Top bar inside the drawer (+ add sub-item & drop lowest) */
+.subcategory-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+}
+
+.sub-action-btn {
+  font-family: inherit;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.55rem;
+  background: var(--bg-cream);
+  color: var(--ink);
+  border: 1.5px dashed var(--border-dashed);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sub-action-btn:hover {
+  background: var(--accent-latte);
+  border-color: var(--ink);
+}
+
+.sub-control-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sub-mini-input {
+  width: 46px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.3rem;
+  border: 1.5px solid var(--border-dashed);
+  border-radius: 5px;
+  background: var(--bg-cream);
+  color: var(--ink);
+  text-align: center;
+}
+
+/* Individual sub-item rows */
+.sub-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sub-item-row {
+  display: grid;
+  grid-template-columns: 1fr 90px 24px;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.sub-item-row input {
+  font-family: inherit;
+  font-size: 0.82rem;
+  padding: 0.35rem 0.5rem;
+  border: 1.5px solid var(--border-dashed);
+  border-radius: 6px;
+  background: var(--bg-cream);
+  color: var(--ink);
+  width: 100%;
+}
+
+.sub-item-row input:focus {
+  outline: none;
+  border-color: var(--ink);
+  background: var(--accent-latte);
+}
+
+/* Match your hidden kaomoji styling on sub-items too */
+.sub-item-row input.is-hidden {
+  border-style: dashed;
+  text-align: center;
+  font-size: 0.75rem;
+  cursor: default;
+}
