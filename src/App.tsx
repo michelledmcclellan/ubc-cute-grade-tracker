@@ -298,7 +298,7 @@ export default function App() {
               </span>
             </div>
             <p className="remaining-note">
-              Weight of remaining tasks: <strong>{stats.remainingWeight}%</strong> (completed: {stats.completedWeight}%)
+              Weight of remaining tasks: <strong>{stats.remainingWeight.toFixed(1)}%</strong> (completed: {stats.completedWeight.toFixed(1)}%)
             </p>
           </div>
 
@@ -312,7 +312,7 @@ export default function App() {
               </span>
             </div>
             <div className="stat-item highlight">
-              <span className="stat-label">Needed on Remaining {stats.remainingWeight}%:</span>
+              <span className="stat-label">Needed on Remaining {stats.remainingWeight.toFixed(1)}%:</span>
               <span className="stat-value">
                 {stats.remainingWeight > 0
                   ? `${stats.requiredOnRemaining.toFixed(1)}%`
