@@ -1,75 +1,24 @@
-# React + TypeScript + Vite
+# ✿ UBC Grade Estimator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A cute but functional grade calculator built for ubc students (future updates will allow for custom grade schemes).
 
-Currently, two official plugins are available:
+## Links
+**The App: [https://ubc-cute-grade-tracker.vercel.app/]** / **Devlog: [in progress]**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
+* **Target Grade & Weighted Math:** Real-time calculation of your current weighted average, remaining course weight, and the exact percentage needed on remaining deliverables to hit your goal.
+* **Cozy Terminal Aesthetics:** Multiple CSS-variable themes (`strawberry`, `matcha`, `midnight`) and swappable ASCII mascots, persisted locally via `localStorage`.
+* **Privacy Mode:** One-click grade masking (`(ᴗ_ ᴗ。)`) for studying in public spaces without layout shifts.
+* *(in progress)* **Subcategories & "Drop Lowest" Logic:** Split weighted categories (like Labs or Quizzes) into individual items with automatic per-item weighting and mid-semester edge-case protection so partial grades never divide by zero.
+* *(in progress)* **Custom Grading Scales:** Defaults to the official UBC percentage/letter/GPA scale, with support for custom grading schemes per course.
+* *(in progress)* **Zero-Backend Course Sharing:** Export and import course syllabus templates as local JSON files to share setups with classmates without exposing personal grades.
 
-## React Compiler
+## Tech Stack
+* **Frontend:** React, TypeScript, Vite
+* **Styling:** Custom CSS with CSS Variables (`:root` / `data-theme`), CSS Grid, and Flexbox
+* **Persistence:** Browser `localStorage` (100% client-side, zero database latency)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+## Bug Fix Highlights
+* **Pure Math Engine (`src/grades.ts`):** Separated all weighted-average, drop-lowest, and letter-grade lookup logic from React UI components for predictable state updates and easy testing.
+* **Defensive Mid-Semester Drop Rules:** When dropping the lowest $D$ items in a category of $N$ tasks, the engine dynamically weights each counted item at $W / \max(1, N - D)$ and only applies drops once more than $D$ items have been graded.
+* **Cross-Platform Layout Stability:** Replaced conditional DOM element swapping with a single `<input>` toggling `readOnly` and `type` attributes so privacy masking never causes OS-specific height shifts.

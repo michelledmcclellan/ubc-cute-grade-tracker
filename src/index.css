@@ -616,17 +616,17 @@ body {
 
 .sub-item-row {
   display: grid;
-  grid-template-columns: 1fr 90px 24px;
+  grid-template-columns: minmax(140px, 269px) 90px 24px;
   gap: 0.5rem;
   align-items: center;
 }
 
 .sub-item-row input {
   font-family: inherit;
-  font-size: 0.82rem;
-  padding: 0.35rem 0.5rem;
+  font-size: 0.78rem;
+  padding: 0.25rem 0.45rem;
   border: 1.5px solid var(--border-dashed);
-  border-radius: 6px;
+  border-radius: 5px;
   background: var(--bg-cream);
   color: var(--ink);
   width: 100%;
