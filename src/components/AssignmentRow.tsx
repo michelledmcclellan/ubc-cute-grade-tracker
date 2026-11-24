@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { type Assignment, type SubItem, calculateSubcategoryStats } from '../grades';
 
 
@@ -59,12 +59,21 @@ export function AssignmentRow({
             onUpdateRow({ ...row, subItems: remaining });
         }
     };
-    // ypdates the number of lowest grades to drop
+    // updates the number of lowest grades to drop
     const handleDropLowestChange = (value: string) => {
         // `|| 0` handles when the user backspaces the box empty (NaN becomes 0)
         const num = Math.max(0, parseInt(value, 10) || 0);
         onUpdateRow({ ...row, dropLowest: num });
     };
+
+    //double check you actually want to delete a course
+    const [confirmDelete, setConfirmDelete] = useState(false);
+
+    useEffect(() => {
+        if (!confirmDelete) return
+        const timer = setTimeout(() => setConfirmDelete(false), 3000);
+        return () => clearTimeout(timer);
+    }, [confirmDelete]);
 
     return (
         <div className="assignment-group">
@@ -129,12 +138,20 @@ export function AssignmentRow({
                     {row.isHidden ? '(ᴗ_ ᴗ。)' : '(◉_ ◉。)'}
                 </button>
                 <button
-                    className="remove-row-btn"
-                    onClick={() => onDelete(row.id)}
-                    title="Remove row"
+                    type="button"
+                    className={`remove-row-btn ${confirmDelete ? 'confirming' : ''}`}
+                    onClick={() => {
+                        if (confirmDelete) {
+                            onDelete(row.id);
+                        } else {
+                            setConfirmDelete(true);
+                        }
+                    }}
+                    title={confirmDelete ? 'Click again to confirm delete' : 'Remove row'}
                 >
-                    [x]
+                    {confirmDelete ? '[x]' : '[?]'}
                 </button>
+
             </div>
 
             {isExpanded && (

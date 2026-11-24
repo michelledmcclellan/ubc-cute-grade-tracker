@@ -205,7 +205,7 @@ export function exportCourseTemplate(course: Course): string {
 export function importCourseTemplate(jsonString: string): Course | null {
     try {
         const parsed = JSON.parse(jsonString)
-        if (!parsed || typeof parsed.name !== 'string' || !Array.isArray(parsed.assignments)) {
+        if (!parsed || typeof parsed.code !== 'string' || !Array.isArray(parsed.assignments)) {
             return null;
         }
 

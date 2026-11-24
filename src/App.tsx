@@ -174,7 +174,6 @@ export default function App() {
   //handler that copies the template 
   const handleCopyTemplate = async () => {
     const json = exportCourseTemplate(activeCourse);
-    btoa(json) //turns the multi-line json into a clean copy paste code block
     await navigator.clipboard.writeText(json);
     showMascotMessage(`Copied ${activeCourse.code} syllabus to clipboard! ദ്ദി(｡•̀ ,<)~✩‧₊`)
   }
