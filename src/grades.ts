@@ -227,3 +227,12 @@ export function importCourseTemplate(jsonString: string): Course | null {
         return null;
     }
 }
+
+// helper for reordering, works for courses and classes hence the generic type
+export function reorderList<T>(list: T[], fromIndex: number, toIndex: number): T[] {
+    if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return list;
+    const result = [...list]
+    const [moved] = result.splice(fromIndex, 1);
+    result.splice(toIndex, 0, moved);
+    return result;
+}

@@ -21,17 +21,6 @@ export const MASCOTS: Record<string, string> = {
 ⠀⠀⣸⠟⠀⠀⠀⠈⠳⣠⣀⠀⠀⠀⠀⠀⠀⠀⡀⣀⣴⠞⠁⠀⠀⠀⢻⡆⠀⠀
 ⠀⠀⠉⠶⠖⠆⠀⠀⢰⠞⠉⠠⠛⠓⢤⠀⣰⠞⠂⠘⢦⡀⠀⠀⠘⠛⠛⠃⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⢀⡟⠀⠀⣤⣤⣴⠛⠀⣿⣀⣤⠀⠈⠷⠀⠀⠀⠀⠀⠀⠀⠀`,
-    panda: `⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⢰⣿⡿⠗⠀⠠⠄⡀⠀⠀⠀⠀
-⠀⠀⠀⠀⡜⢁⣀⡀⠀⠀⠀⠈⠑⢶⣶⡄
-⢀⣶⣦⣸⠈⢿⣟⡇⠀⠀⣀⣀⠀⠘⡿⠃
-⠀⢿⣿⣿⣄⠒⠀⠠⢶⡂⢫⣿⢇⢀⠃⠀
-⠀⠈⢿⡿⣿⣿⣶⣤⣀⣄⣀⣂⡠⠊⠀⠀
-⠀⠀⠀⡇⠀⠀⠉⠙⠛⠿⣿⣿⣧⠀⠀⠀
-⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠘⣿⣿⡇⠀⠀
-⠀⠀⠀⣿⣧⡤⠄⣀⣀⣀⣴⡟⠿⠃⠀⠀
-⠀⠀⠀⢻⣿⣿⠉⠉⢹⣿⣿⠁⠀⠀⠀⠀
-⠀⠀⠀⠀⠉⠁⠀⠀⠀⠉⠁⠀⠀⠀⠀⠀`,
     turtle: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠘⠦⠼⠃⠀⠀⠀⠀⡠⠖⠚⠒⢦⡀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⡫⡤⠀⠀⡤⡧⠀⠀⠀⠀⠀⠀
@@ -86,7 +75,6 @@ export const THEME_OPTIONS: DropdownOption<string>[] = [
 export const MASCOT_OPTIONS: DropdownOption<string>[] = [
     { value: 'bunny', label: 'Bunny' },
     { value: 'cat', label: 'Cat' },
-    { value: 'panda', label: 'Panda' },
     { value: 'turtle', label: 'Turtle' },
     { value: 'toro', label: 'Toro' },
     { value: 'sleepyPanda', label: 'Sleepy Panda' }

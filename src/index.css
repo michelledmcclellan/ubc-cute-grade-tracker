@@ -157,6 +157,10 @@ body {
   align-items: center;
 }
 
+.header-name-cell {
+  padding-left: 2.35rem;
+}
+
 .tab {
   display: flex;
   align-items: center;
@@ -229,10 +233,15 @@ body {
   box-shadow: 4px 4px 0px var(--border-dashed);
 }
 
-.table-header {
+.table-header,
+.assignment-row {
   display: grid;
-  grid-template-columns: 1fr 100px 110px 55px 20px;
-  gap: 0.6rem;
+  grid-template-columns: 1fr 84px 88px 55px 20px;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.table-header {
   font-size: 0.8rem;
   font-weight: 700;
   padding-bottom: 0.5rem;
@@ -246,13 +255,6 @@ body {
   gap: 0.5rem;
 }
 
-.assignment-row {
-  display: grid;
-  grid-template-columns: 1fr 100px 110px 55px 20px;
-  gap: 0.6rem;
-  align-items: center;
-}
-
 .assignment-row input {
   font-family: inherit;
   font-size: 0.88rem;
@@ -262,6 +264,10 @@ body {
   background: var(--bg-cream);
   color: var(--ink);
   width: 100%;
+}
+
+.assignment-row input.is-hidden {
+  font-size: 0.70rem;
 }
 
 .assignment-row input:focus {
@@ -553,7 +559,7 @@ body {
 
 /* The indented terminal-tree drawer */
 .subcategory-drawer {
-  margin-left: 1.25rem;
+  margin-left: 2.35rem;
   margin-top: 0.45rem;
   padding-left: 0.85rem;
   border-left: 2px dashed var(--border-dashed);
@@ -614,7 +620,7 @@ body {
 
 .sub-item-row {
   display: grid;
-  grid-template-columns: minmax(140px, 269px) 90px 24px;
+  grid-template-columns: minmax(120px, 233px) 85px 20px;
   gap: 0.5rem;
   align-items: center;
 }
@@ -640,7 +646,7 @@ body {
 .sub-item-row input.is-hidden {
   border-style: dashed;
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.70rem;
   cursor: default;
 }
 
@@ -690,4 +696,25 @@ body {
 .delete-tab-btn.confirming {
   color: var(--negative-color);
   font-weight: 700;
+}
+
+.drag-handle {
+  color: var(--ink-muted);
+  cursor: grab;
+  user-select: none;
+  font-size: 0.85rem;
+  padding-right: 0.15rem;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.assignment-group.is-dragging {
+  opacity: 0.45;
+}
+
+.assignment-group.is-drag-over {
+  border-top: 2px dashed var(--accent-pink);
+  padding-top: 0.35rem;
 }

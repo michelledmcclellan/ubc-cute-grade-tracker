@@ -4,6 +4,13 @@ import { type Assignment, type SubItem, calculateSubcategoryStats } from '../gra
 
 interface AssignmentRowProps {
     row: Assignment;
+    index: number;
+    isDragging: boolean;
+    isDragOver: boolean;
+    onDragStart: () => void;
+    onDragOver: (e: React.DragEvent) => void;
+    onDrop: () => void;
+    onDragEnd: () => void;
     onChange: (id: string, field: keyof Assignment, value: string) => void;
     onToggleVisibility: (id: string) => void;
     onDelete: (id: string) => void;
@@ -13,6 +20,12 @@ interface AssignmentRowProps {
 
 export function AssignmentRow({
     row,
+    isDragging,
+    isDragOver,
+    onDragStart,
+    onDragOver,
+    onDrop,
+    onDragEnd,
     onChange,
     onToggleVisibility,
     onDelete,
@@ -76,15 +89,27 @@ export function AssignmentRow({
     }, [confirmDelete]);
 
     return (
-        <div className="assignment-group">
-
+        <div
+            className={`assignment-group ${isDragging ? 'is-dragging' : ''} ${isDragOver ? 'is-drag-over' : ''}`}
+            onDragOver={onDragOver}
+            onDrop={onDrop}
+        >
             <div className="assignment-row">
                 <div className="name-cell">
+                    <span
+                        className="drag-handle"
+                        draggable
+                        onDragStart={onDragStart}
+                        onDragEnd={onDragEnd}
+                        title="Drag to reorder"
+                    >
+                        ⋮⋮
+                    </span>
                     <button
                         type="button"
                         className="expand-btn"
                         onClick={() => setIsExpanded(!isExpanded)}
-                        title={hasSubItems ? 'Toggle sub-items' : 'Split into sub-items'}
+                        title={isExpanded ? 'Collapse sub-items' : 'Expand sub-items'}
                     >
                         {isExpanded ? '▾' : '▸'}
                     </button>

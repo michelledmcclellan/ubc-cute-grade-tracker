@@ -7,6 +7,7 @@ import {
   calculateCourseStats,
   exportCourseTemplate,
   importCourseTemplate,
+  reorderList,
 } from './grades';
 import './App.css';
 import { CozyDropdown, type DropdownMenuKey } from './components/Dropdown';
@@ -218,6 +219,21 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [confirmDeleteCourseId]);
 
+  //drag and drop handlers, uses native html features
+
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  const handleDropAssignment = (toIndex: number) => {
+    if (dragIndex !== null && dragIndex !== toIndex) {
+      updateActiveCourse((course) => ({
+        ...course,
+        assignments: reorderList(course.assignments, dragIndex, toIndex),
+      }));
+    }
+    setDragIndex(null);
+    setDragOverIndex(null);
+  };
 
   return (
     <div className="app-container">
@@ -316,23 +332,36 @@ export default function App() {
       {/* Main Course Card */}
       <main className="calculator-card">
         <div className="table-header">
-          <span>Assignment / Exam</span>
+          <span className="header-name-cell">Assignment / Exam</span>
           <span>Grade (%)</span>
           <span>Weight (%)</span>
+          <span></span>
           <span></span>
         </div>
 
         <div className="assignment-list">
-          {activeCourse.assignments.map((row) => (
+          {activeCourse.assignments.map((row, index) => (
             <AssignmentRow
               key={row.id}
               row={row}
+              index={index}
+              isDragging={dragIndex === index}
+              isDragOver={dragOverIndex === index && dragIndex !== index}
+              onDragStart={() => setDragIndex(index)}
+              onDragOver={(e) => {
+                e.preventDefault(); // Required by browsers to allow dropping!
+                setDragOverIndex(index);
+              }}
+              onDrop={() => handleDropAssignment(index)}
+              onDragEnd={() => {
+                setDragIndex(null);
+                setDragOverIndex(null);
+              }}
               onChange={handleAssignmentChange}
               onToggleVisibility={handleToggleVisibility}
               onDelete={handleDeleteRow}
               onUpdateRow={handleUpdateRow}
             />
-
           ))}
         </div>
 
