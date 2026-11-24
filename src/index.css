@@ -7,6 +7,8 @@
   --accent-sage: #d8e2dc;
   --accent-latte: #ffe5d9;
   --border-dashed: #cbbcb1;
+
+  --negative-color: #e15b6f;
 }
 
 /* Matcha Latte Theme */
@@ -298,10 +300,6 @@ body {
   color: var(--ink-muted);
   cursor: pointer;
   font-size: 0.8rem;
-}
-
-.remove-row-btn:hover {
-  color: #d62828;
 }
 
 .add-row-btn {
@@ -682,4 +680,14 @@ body {
   outline: none;
   border-color: var(--ink);
   background: var(--accent-latte);
+}
+
+.remove-row-btn:hover {
+  color: var(--negative-color);
+}
+
+.remove-row-btn.confirming,
+.delete-tab-btn.confirming {
+  color: var(--negative-color);
+  font-weight: 700;
 }

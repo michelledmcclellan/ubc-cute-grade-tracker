@@ -149,7 +149,7 @@ export function AssignmentRow({
                     }}
                     title={confirmDelete ? 'Click again to confirm delete' : 'Remove row'}
                 >
-                    {confirmDelete ? '[x]' : '[?]'}
+                    {confirmDelete ? '[⦸]' : '[x]'}
                 </button>
 
             </div>

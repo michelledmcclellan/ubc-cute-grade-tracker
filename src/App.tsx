@@ -207,6 +207,17 @@ export default function App() {
     }, 4000); // Reverts to the default mascot message after 4 seconds
   }
 
+  //course tab delete confirmation
+
+  //tracks the course id cuurently waiting to be confirmed
+  const [confirmDeleteCourseId, setConfirmDeleteCourseId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!confirmDeleteCourseId) return;
+    const timer = setTimeout(() => setConfirmDeleteCourseId(null), 3000);
+    return () => clearTimeout(timer);
+  }, [confirmDeleteCourseId]);
+
 
   return (
     <div className="app-container">
@@ -268,14 +279,24 @@ export default function App() {
             <span>{course.code}</span>
             {courses.length > 1 && (
               <button
-                className="delete-tab-btn"
-                title="Delete course"
+                type="button"
+                className={`delete-tab-btn ${confirmDeleteCourseId === course.id ? 'confirming' : ''}`}
+                title={
+                  confirmDeleteCourseId === course.id
+                    ? 'Click again to delete course'
+                    : 'Delete course'
+                }
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleDeleteCourse(course.id);
+                  if (confirmDeleteCourseId === course.id) {
+                    handleDeleteCourse(course.id);
+                    setConfirmDeleteCourseId(null);
+                  } else {
+                    setConfirmDeleteCourseId(course.id);
+                  }
                 }}
               >
-                ×
+                {confirmDeleteCourseId === course.id ? '⦸' : '×'}
               </button>
             )}
           </div>
