@@ -5,6 +5,8 @@ import {
   loadCourses,
   saveCourses,
   calculateCourseStats,
+  exportCourseTemplate,
+  importCourseTemplate,
 } from './grades';
 import './App.css';
 import { CozyDropdown, type DropdownMenuKey } from './components/Dropdown';
@@ -160,6 +162,53 @@ export default function App() {
     return `you got this!! you need ${stats.requiredOnRemaining.toFixed(1)}% on the remaining ${stats.remainingWeight}% to hit ${activeCourse.goalGrade}% (${stats.ubcGoal.letter}) (๑°꒵°๑)･*♡`;
   };
 
+  // Added an export/import course template functionality
+
+
+  //inline paste bar functionality
+
+  const [isImporting, setIsImporting] = useState(false);
+  const [importText, setImportText] = useState('');
+
+
+  //handler that copies the template 
+  const handleCopyTemplate = async () => {
+    const json = exportCourseTemplate(activeCourse);
+    btoa(json) //turns the multi-line json into a clean copy paste code block
+    await navigator.clipboard.writeText(json);
+    showMascotMessage(`Copied ${activeCourse.code} syllabus to clipboard! ദ്ദി(｡•̀ ,<)~✩‧₊`)
+  }
+
+  // the handler for pasting the template in
+  const handleImportSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!importText.trim()) return;
+
+    const imported = importCourseTemplate(importText);
+    if (!imported) {
+      showMascotMessage(`uh oh!! seems like that was not a valid course template ( •̯́ ₃ •̯̀)`);
+      return;
+    }
+
+    setCourses((prev) => [...prev, imported]);
+    setActiveCourseId(imported.id);
+    setImportText('');
+    setIsImporting(false);
+    showMascotMessage(`imported ${imported.code}!! ready to calculate some grades ₍₍⚞(˶˃ ᗜ ˂˶)⚟⁾⁾`)
+  }
+
+  // helper to put a temporary message into the mascot speech bubble
+
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+
+  const showMascotMessage = (msg: string) => {
+    setStatusMessage(msg);
+    setTimeout(() => {
+      setStatusMessage((current) => (current === msg ? null : current));
+    }, 4000); // Reverts to the default mascot message after 4 seconds
+  }
+
+
   return (
     <div className="app-container">
       {/* Header with ASCII Bunny & Speech Bubble */}
@@ -180,8 +229,8 @@ export default function App() {
             └──────────────────────────────┘
           </div>
           <div className="speech-bubble">
-            <span className="bubble-arrow">‹ </span>
-            {getBunnyMessage()}
+            <span className="bubble-arrow">⟢ </span>
+            {statusMessage ?? getBunnyMessage()}
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <div className="dropdown-toolbar">
@@ -267,9 +316,55 @@ export default function App() {
           ))}
         </div>
 
-        <button className="add-row-btn" onClick={handleAddRow}>
-          + add more rows
-        </button>
+        <div className="course-actions">
+          <button type="button" className="add-row-btn" onClick={handleAddRow}>
+            + add more rows
+          </button>
+
+          <div className="share-buttons">
+            <button type="button" className="sub-action-btn" onClick={handleCopyTemplate}>
+              copy template
+            </button>
+
+            {!isImporting ? (
+              <button
+                type="button"
+                className="sub-action-btn"
+                onClick={() => setIsImporting(true)}
+              >
+                import template
+              </button>
+            ) : (
+              <form className="import-inline-form" onSubmit={handleImportSubmit}>
+                <input
+                  type="text"
+                  className="cozy-input"
+                  placeholder="Paste course JSON..."
+                  value={importText}
+                  onChange={(e) => setImportText(e.target.value)}
+                  autoFocus
+                />
+                <button type="submit" className="sub-action-btn">
+                  add
+                </button>
+                <button
+                  type="button"
+                  className="remove-row-btn"
+                  onClick={() => {
+                    setIsImporting(false);
+                    setImportText('');
+                  }}
+                  title="Cancel import"
+                >
+                  [x]
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+
+
+
 
         <div className="ascii-divider">
           ══════════════════ ⋆★⋆ ══════════════════

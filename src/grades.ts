@@ -181,3 +181,49 @@ export function loadCourses(): Course[] {
 export function saveCourses(courses: Course[]): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(courses));
 }
+
+// added for exporting a course to friends
+
+// converts a course into JSON string, removes grades while doing so
+export function exportCourseTemplate(course: Course): string {
+    const cleanedCourse: Course = {
+        ...course,
+        assignments: course.assignments.map((assignment) => ({
+            ...assignment,
+            grade: '', //empty grades for each instead of keeping those of the one sharing
+            isHidden: false, //no need to hide when there are no grades
+            subItems: assignment.subItems?.map((sub) => ({ //do the same thing to the sub items
+                ...sub,
+                grade: '',
+            }))
+        }))
+    }
+    return JSON.stringify(cleanedCourse, null, 2);
+}
+
+//parses a pasted in JSON string, assigns new IDs to be certain that nothing crashes
+export function importCourseTemplate(jsonString: string): Course | null {
+    try {
+        const parsed = JSON.parse(jsonString)
+        if (!parsed || typeof parsed.name !== 'string' || !Array.isArray(parsed.assignments)) {
+            return null;
+        }
+
+        return {
+            ...parsed,
+            id: crypto.randomUUID(),
+            assignments: parsed.assignments.map((assignment: Assignment) => ({
+                ...assignment,
+                id: crypto.randomUUID(),
+                grade: assignment.grade ?? '',
+                subItems: assignment.subItems?.map((sub) => ({
+                    ...sub,
+                    id: crypto.randomUUID(),
+                    grade: sub.grade ?? '',
+                })),
+            })),
+        }
+    } catch { // catches a malformed JSON from JSON.parse, returns null, prevents a crash as compared to throwing
+        return null;
+    }
+}
