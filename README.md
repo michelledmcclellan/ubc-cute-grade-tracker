@@ -3,15 +3,16 @@
 A cute but functional grade calculator built for ubc students (future updates will allow for custom grade schemes).
 
 ## Links
-**The App: [https://ubc-cute-grade-tracker.vercel.app/]** / **Devlog: [in progress]**
+**The App:** [ubc-cute-grade-tracker.vercel.app](https://ubc-cute-grade-tracker.vercel.app/) · **Devlog:** *(in progress)*
 
 ## Features
 * **Target Grade & Weighted Math:** Real-time calculation of your current weighted average, remaining course weight, and the exact percentage needed on remaining deliverables to hit your goal.
 * **Cozy Terminal Aesthetics:** Multiple CSS-variable themes (`strawberry`, `matcha`, `midnight`) and swappable ASCII mascots, persisted locally via `localStorage`.
 * **Privacy Mode:** One-click grade masking (`(ᴗ_ ᴗ。)`) for studying in public spaces without layout shifts.
-* *(in progress)* **Subcategories & "Drop Lowest" Logic:** Split weighted categories (like Labs or Quizzes) into individual items with automatic per-item weighting and mid-semester edge-case protection so partial grades never divide by zero.
+* **Subcategories & "Drop Lowest" Logic:** Split weighted categories (like Labs or Quizzes) into individual items with automatic per-item weighting and mid-semester edge-case protection so partial grades never divide by zero.
 * *(in progress)* **Custom Grading Scales:** Defaults to the official UBC percentage/letter/GPA scale, with support for custom grading schemes per course.
 * *(in progress)* **Zero-Backend Course Sharing:** Export and import course syllabus templates as local JSON files to share setups with classmates without exposing personal grades.
+* *(in progress)* **Drag and Drop Rearranging:** Reorder course tabs, assignments, and sub-items using native HTML Drag and Drop.
 
 ## Tech Stack
 * **Frontend:** React, TypeScript, Vite

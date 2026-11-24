@@ -175,7 +175,7 @@ export default function App() {
         <div className="header-text">
           <div className="title-banner">
             ┌──────────────────────────────┐
-            <br />│ ✿ UBC GRADE ESTIMATOR ✿                         │
+            <br />│ ✿ UBC GRADE ESTIMATOR ✿ {"      "}│
             <br />
             └──────────────────────────────┘
           </div>
