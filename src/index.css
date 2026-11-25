@@ -710,11 +710,21 @@ body {
   cursor: grabbing;
 }
 
+.drag-handle:hover {
+  color: var(--accent-pink);
+  transform: scale(1.15);
+}
+
 .assignment-group.is-dragging {
   opacity: 0.45;
 }
 
-.assignment-group.is-drag-over {
-  border-top: 2px dashed var(--accent-pink);
+.assignment-group.is-drag-over-above {
+  border-top: 2px dashed var(--ink-muted);
   padding-top: 0.35rem;
+}
+
+.assignment-group.is-drag-over-below {
+  border-bottom: 2px dashed var(--ink-muted);
+  padding-bottom: 0.35rem;
 }

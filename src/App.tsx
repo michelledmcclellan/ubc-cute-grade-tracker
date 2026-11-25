@@ -340,29 +340,38 @@ export default function App() {
         </div>
 
         <div className="assignment-list">
-          {activeCourse.assignments.map((row, index) => (
-            <AssignmentRow
-              key={row.id}
-              row={row}
-              index={index}
-              isDragging={dragIndex === index}
-              isDragOver={dragOverIndex === index && dragIndex !== index}
-              onDragStart={() => setDragIndex(index)}
-              onDragOver={(e) => {
-                e.preventDefault(); // Required by browsers to allow dropping!
-                setDragOverIndex(index);
-              }}
-              onDrop={() => handleDropAssignment(index)}
-              onDragEnd={() => {
-                setDragIndex(null);
-                setDragOverIndex(null);
-              }}
-              onChange={handleAssignmentChange}
-              onToggleVisibility={handleToggleVisibility}
-              onDelete={handleDeleteRow}
-              onUpdateRow={handleUpdateRow}
-            />
-          ))}
+          {activeCourse.assignments.map((row, index) => {
+            const dropPosition =
+              dragOverIndex === index && dragIndex !== null && dragIndex !== index
+                ? dragIndex > index
+                  ? 'above'
+                  : 'below'
+                : null;
+
+            return (
+              <AssignmentRow
+                key={row.id}
+                row={row}
+                index={index}
+                isDragging={dragIndex === index}
+                dropPosition={dropPosition}
+                onDragStart={() => setDragIndex(index)}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setDragOverIndex(index);
+                }}
+                onDrop={() => handleDropAssignment(index)}
+                onDragEnd={() => {
+                  setDragIndex(null);
+                  setDragOverIndex(null);
+                }}
+                onChange={handleAssignmentChange}
+                onToggleVisibility={handleToggleVisibility}
+                onDelete={handleDeleteRow}
+                onUpdateRow={handleUpdateRow}
+              />
+            );
+          })}
         </div>
 
         <div className="course-actions">

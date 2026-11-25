@@ -6,7 +6,7 @@ interface AssignmentRowProps {
     row: Assignment;
     index: number;
     isDragging: boolean;
-    isDragOver: boolean;
+    dropPosition: 'above' | 'below' | null;
     onDragStart: () => void;
     onDragOver: (e: React.DragEvent) => void;
     onDrop: () => void;
@@ -21,7 +21,7 @@ interface AssignmentRowProps {
 export function AssignmentRow({
     row,
     isDragging,
-    isDragOver,
+    dropPosition,
     onDragStart,
     onDragOver,
     onDrop,
@@ -90,7 +90,8 @@ export function AssignmentRow({
 
     return (
         <div
-            className={`assignment-group ${isDragging ? 'is-dragging' : ''} ${isDragOver ? 'is-drag-over' : ''}`}
+            className={`assignment-group ${isDragging ? 'is-dragging' : ''} ${dropPosition === 'above' ? 'is-drag-over-above' : ''
+                } ${dropPosition === 'below' ? 'is-drag-over-below' : ''}`}
             onDragOver={onDragOver}
             onDrop={onDrop}
         >
@@ -103,7 +104,7 @@ export function AssignmentRow({
                         onDragEnd={onDragEnd}
                         title="Drag to reorder"
                     >
-                        ⋮⋮
+                        ⊹
                     </span>
                     <button
                         type="button"
