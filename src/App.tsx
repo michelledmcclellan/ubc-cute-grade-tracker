@@ -37,6 +37,16 @@ export default function App() {
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('ubc_theme', theme);
+
+    // Read the active --bg-cream CSS variable straight from the computed style
+    const bgCream = getComputedStyle(document.body)
+      .getPropertyValue('--bg-cream')
+      .trim();
+
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor && bgCream) {
+      metaThemeColor.setAttribute('content', bgCream);
+    }
   }, [theme]);
 
 
