@@ -7,12 +7,12 @@ import {
   calculateCourseStats,
   exportCourseTemplate,
   importCourseTemplate,
-  reorderList,
 } from './grades';
 import './App.css';
 import { CozyDropdown, type DropdownMenuKey } from './components/Dropdown';
 import { MASCOT_OPTIONS, MASCOTS, THEME_OPTIONS } from './constants';
 import { AssignmentRow } from './components/AssignmentRow';
+import { useDragReorder } from './hooks/useDragReorder';
 
 export default function App() {
   // 1. State: Load courses from localStorage when app opens
@@ -210,7 +210,7 @@ export default function App() {
 
   //course tab delete confirmation
 
-  //tracks the course id cuurently waiting to be confirmed
+  //tracks the course id curently waiting to be confirmed
   const [confirmDeleteCourseId, setConfirmDeleteCourseId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -219,21 +219,18 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [confirmDeleteCourseId]);
 
-  //drag and drop handlers, uses native html features
+  // assignment drag using hook calls
 
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const assignmentDrag = useDragReorder(
+    activeCourse.assignments,
+    (newAssignments) =>
+      updateActiveCourse((course) => ({ ...course, assignments: newAssignments }))
+  );
 
-  const handleDropAssignment = (toIndex: number) => {
-    if (dragIndex !== null && dragIndex !== toIndex) {
-      updateActiveCourse((course) => ({
-        ...course,
-        assignments: reorderList(course.assignments, dragIndex, toIndex),
-      }));
-    }
-    setDragIndex(null);
-    setDragOverIndex(null);
-  };
+  // course drag using hook call
+
+  const courseTabDrag = useDragReorder(courses, setCourses);
+
 
   return (
     <div className="app-container">
@@ -286,37 +283,46 @@ export default function App() {
 
       {/* Course Tabs Bar */}
       <nav className="course-tabs">
-        {courses.map((course) => (
-          <div
-            key={course.id}
-            className={`tab ${course.id === activeCourse.id ? 'active' : ''}`}
-            onClick={() => setActiveCourseId(course.id)}
-          >
-            <span>{course.code}</span>
-            {courses.length > 1 && (
-              <button
-                type="button"
-                className={`delete-tab-btn ${confirmDeleteCourseId === course.id ? 'confirming' : ''}`}
-                title={
-                  confirmDeleteCourseId === course.id
-                    ? 'Click again to delete course'
-                    : 'Delete course'
-                }
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (confirmDeleteCourseId === course.id) {
-                    handleDeleteCourse(course.id);
-                    setConfirmDeleteCourseId(null);
-                  } else {
-                    setConfirmDeleteCourseId(course.id);
+        {courses.map((course, index) => {
+          const { isDragging, dropPosition, ...dragHandlers } = courseTabDrag.getItemProps(index);
+
+          return (
+            <div
+              key={course.id}
+              draggable
+              {...dragHandlers}
+              className={`tab ${course.id === activeCourse.id ? 'active' : ''} ${isDragging ? 'is-dragging' : ''
+                } ${dropPosition === 'before' ? 'is-drag-over-left' : ''} ${dropPosition === 'after' ? 'is-drag-over-right' : ''
+                }`}
+              onClick={() => setActiveCourseId(course.id)}
+              title="Click to switch, drag to reorder"
+            >
+              <span>{course.code}</span>
+              {courses.length > 1 && (
+                <button
+                  type="button"
+                  className={`delete-tab-btn ${confirmDeleteCourseId === course.id ? 'confirming' : ''}`}
+                  title={
+                    confirmDeleteCourseId === course.id
+                      ? 'Click again to delete course'
+                      : 'Delete course'
                   }
-                }}
-              >
-                {confirmDeleteCourseId === course.id ? '⦸' : '×'}
-              </button>
-            )}
-          </div>
-        ))}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (confirmDeleteCourseId === course.id) {
+                      handleDeleteCourse(course.id);
+                      setConfirmDeleteCourseId(null);
+                    } else {
+                      setConfirmDeleteCourseId(course.id);
+                    }
+                  }}
+                >
+                  {confirmDeleteCourseId === course.id ? '⦸' : '×'}
+                </button>
+              )}
+            </div>
+          );
+        })}
 
         <form onSubmit={handleAddCourse} className="new-course-form">
           <input
@@ -341,30 +347,15 @@ export default function App() {
 
         <div className="assignment-list">
           {activeCourse.assignments.map((row, index) => {
-            const dropPosition =
-              dragOverIndex === index && dragIndex !== null && dragIndex !== index
-                ? dragIndex > index
-                  ? 'above'
-                  : 'below'
-                : null;
+            const { isDragging, dropPosition, ...dragHandlers } = assignmentDrag.getItemProps(index);
 
             return (
               <AssignmentRow
                 key={row.id}
                 row={row}
-                index={index}
-                isDragging={dragIndex === index}
+                isDragging={isDragging}
                 dropPosition={dropPosition}
-                onDragStart={() => setDragIndex(index)}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setDragOverIndex(index);
-                }}
-                onDrop={() => handleDropAssignment(index)}
-                onDragEnd={() => {
-                  setDragIndex(null);
-                  setDragOverIndex(null);
-                }}
+                {...dragHandlers}
                 onChange={handleAssignmentChange}
                 onToggleVisibility={handleToggleVisibility}
                 onDelete={handleDeleteRow}

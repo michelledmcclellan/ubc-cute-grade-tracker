@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { type Assignment, type SubItem, calculateSubcategoryStats } from '../grades';
+import { type DropPosition } from '../hooks/useDragReorder';
 
 
 interface AssignmentRowProps {
     row: Assignment;
-    index: number;
     isDragging: boolean;
-    dropPosition: 'above' | 'below' | null;
+    dropPosition: DropPosition;
     onDragStart: () => void;
     onDragOver: (e: React.DragEvent) => void;
     onDrop: () => void;
@@ -90,8 +90,8 @@ export function AssignmentRow({
 
     return (
         <div
-            className={`assignment-group ${isDragging ? 'is-dragging' : ''} ${dropPosition === 'above' ? 'is-drag-over-above' : ''
-                } ${dropPosition === 'below' ? 'is-drag-over-below' : ''}`}
+            className={`assignment-group ${isDragging ? 'is-dragging' : ''} ${dropPosition === 'before' ? 'is-drag-over-above' : ''
+                } ${dropPosition === 'after' ? 'is-drag-over-below' : ''}`}
             onDragOver={onDragOver}
             onDrop={onDrop}
         >

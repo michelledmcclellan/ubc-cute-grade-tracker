@@ -3,9 +3,9 @@
   --card-bg: #ffffff;
   --ink: #3d352e;
   --ink-muted: #8c7f70;
-  --accent-pink: #f4acb7;
-  --accent-sage: #d8e2dc;
-  --accent-latte: #ffe5d9;
+  --accent-highlight: #f4acb7;
+  --accent-faded: #d8e2dc;
+  --accent-box: #ffe5d9;
   --border-dashed: #cbbcb1;
 
   --negative-color: #e15b6f;
@@ -17,9 +17,9 @@
   --card-bg: #ffffff;
   --ink: #2b3a2e;
   --ink-muted: #6b7f6e;
-  --accent-pink: #b7e4c7;
-  --accent-sage: #d8f3dc;
-  --accent-latte: #e9f5ec;
+  --accent-highlight: #b7e4c7;
+  --accent-faded: #d8f3dc;
+  --accent-box: #e9f5ec;
   --border-dashed: #a3b8a8;
 }
 
@@ -29,9 +29,9 @@
   --card-bg: #28283d;
   --ink: #cdd6f4;
   --ink-muted: #9399b2;
-  --accent-pink: #99acff;
-  --accent-sage: #45475a;
-  --accent-latte: #313244;
+  --accent-highlight: #99acff;
+  --accent-faded: #45475a;
+  --accent-box: #313244;
   --border-dashed: #585b70;
 }
 
@@ -41,9 +41,9 @@
   --card-bg: #392f4a;
   --ink: #cfc0ff;
   --ink-muted: #a093b2;
-  --accent-pink: #a881c3;
-  --accent-sage: #3c305d;
-  --accent-latte: #473f6d;
+  --accent-highlight: #a881c3;
+  --accent-faded: #3c305d;
+  --accent-box: #473f6d;
   --border-dashed: #645870;
 }
 
@@ -53,9 +53,9 @@
   --card-bg: #ffffff;
   --ink: #716A8D;
   --ink-muted: #ba99b2;
-  --accent-pink: #d7bff6;
-  --accent-sage: #FAEECD;
-  --accent-latte: #e3d1f5;
+  --accent-highlight: #d7bff6;
+  --accent-faded: #FAEECD;
+  --accent-box: #e3d1f5;
   --border-dashed: #c7afe8;
 }
 
@@ -65,9 +65,9 @@
   --card-bg: #fdf2eb;
   --ink: #8c5e4f;
   --ink-muted: #c99988;
-  --accent-pink: #ddb695;
-  --accent-sage: #fff8f3;
-  --accent-latte: #f0d8c8;
+  --accent-highlight: #ddb695;
+  --accent-faded: #fff8f3;
+  --accent-box: #f0d8c8;
   --border-dashed: #b7887a;
 }
 
@@ -77,9 +77,9 @@
   --card-bg: #573f3b;
   --ink: #e2c6ab;
   --ink-muted: #d3b79e;
-  --accent-pink: #825947;
-  --accent-sage: #8b5c4c;
-  --accent-latte: #b1816f;
+  --accent-highlight: #825947;
+  --accent-faded: #8b5c4c;
+  --accent-box: #b1816f;
   --border-dashed: #b3887e;
 }
 
@@ -140,7 +140,7 @@ body {
 }
 
 .speech-bubble {
-  background-color: var(--accent-latte);
+  background-color: var(--accent-box);
   border: 1.5px solid var(--ink);
   border-radius: 8px;
   padding: 0.6rem 0.8rem;
@@ -166,7 +166,7 @@ body {
   align-items: center;
   gap: 0.4rem;
   padding: 0.45rem 0.85rem;
-  background: var(--accent-sage);
+  background: var(--accent-faded);
   border: 1.5px solid var(--ink);
   border-radius: 8px 8px 0 0;
   font-size: 0.85rem;
@@ -177,7 +177,7 @@ body {
 }
 
 .tab.active {
-  background: var(--accent-pink);
+  background: var(--accent-highlight);
   opacity: 1;
   transform: translateY(-2px);
 }
@@ -210,7 +210,7 @@ body {
 }
 
 .new-course-form input:focus-visible {
-  background-color: var(--accent-latte);
+  background-color: var(--accent-box);
 }
 
 .new-course-form button {
@@ -273,7 +273,7 @@ body {
 .assignment-row input:focus {
   outline: none;
   border-color: var(--ink);
-  background: var(--accent-latte);
+  background: var(--accent-box);
 }
 
 .weight-input-wrapper {
@@ -321,7 +321,7 @@ body {
 }
 
 .add-row-btn:hover {
-  background: var(--accent-latte);
+  background: var(--accent-box);
 }
 
 .ascii-divider {
@@ -365,11 +365,11 @@ body {
 }
 
 .goal-input-group input:focus-visible {
-  background-color: (var(--accent-latte));
+  background-color: (var(--accent-box));
 }
 
 .ubc-badge {
-  background: var(--accent-sage);
+  background: var(--accent-faded);
   border: 1.5px solid var(--ink);
   padding: 0.3rem 0.65rem;
   border-radius: 6px;
@@ -400,7 +400,7 @@ body {
 }
 
 .stat-item.highlight {
-  background: var(--accent-latte);
+  background: var(--accent-box);
   border-color: var(--ink);
 }
 
@@ -462,11 +462,11 @@ body {
 }
 
 .cozy-dropdown-trigger:hover {
-  background-color: var(--accent-latte);
+  background-color: var(--accent-box);
 }
 
 .cozy-dropdown-trigger[aria-expanded="true"] {
-  background-color: var(--accent-pink);
+  background-color: var(--accent-highlight);
 }
 
 .cozy-dropdown-caret {
@@ -509,11 +509,11 @@ body {
 }
 
 .cozy-dropdown-option:hover {
-  background-color: var(--accent-latte);
+  background-color: var(--accent-box);
 }
 
 .cozy-dropdown-option.selected {
-  background-color: var(--accent-sage);
+  background-color: var(--accent-faded);
   font-weight: 700;
 }
 
@@ -589,7 +589,7 @@ body {
 }
 
 .sub-action-btn:hover {
-  background: var(--accent-latte);
+  background: var(--accent-box);
   border-color: var(--ink);
 }
 
@@ -639,7 +639,7 @@ body {
 .sub-item-row input:focus {
   outline: none;
   border-color: var(--ink);
-  background: var(--accent-latte);
+  background: var(--accent-box);
 }
 
 /* Match your hidden kaomoji styling on sub-items too */
@@ -685,7 +685,7 @@ body {
 .import-inline-form input:focus {
   outline: none;
   border-color: var(--ink);
-  background: var(--accent-latte);
+  background: var(--accent-box);
 }
 
 .remove-row-btn:hover {
@@ -711,7 +711,7 @@ body {
 }
 
 .drag-handle:hover {
-  color: var(--accent-pink);
+  color: var(--accent-highlight);
   transform: scale(1.15);
 }
 
