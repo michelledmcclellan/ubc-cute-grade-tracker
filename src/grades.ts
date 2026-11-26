@@ -14,7 +14,7 @@ export interface Course {
     code: string;
     goalGrade: number;
     assignments: Assignment[];
-    gradingScheme?: GradeTier[];
+    gradeScheme?: GradeScheme;
 }
 
 // functionality for a custom grade scheme
@@ -22,6 +22,11 @@ export interface GradeTier {
     letter: string // A+,, A, A-, B, C, etc, required
     min: number; // range, for ex 90, required
     gpa?: number; // number gpa for a given letter, optional in case some dont track gpa
+}
+
+export interface GradeScheme {
+    name: string; // UBC, 4.0, UT, etc
+    tiers: GradeTier[]; // sorted highest min to lowest min
 }
 
 // functionality for subcategories of items
@@ -32,33 +37,32 @@ export interface SubItem {
     isHidden?: boolean;
 }
 
-// 2. UBC Official Grading Scale Lookup
-// made the ubc scale a default object when I expanded this to have custom grade schemes
-export const DEFAULT_UBC_SCALE: GradeTier[] = [
-    { letter: "A+", min: 90, gpa: 4.33 },
-    { letter: "A", min: 85, gpa: 4.00 },
-    { letter: "A-", min: 80, gpa: 3.67 },
-    { letter: "B+", min: 76, gpa: 3.33 },
-    { letter: "B", min: 72, gpa: 3.00 },
-    { letter: "B-", min: 68, gpa: 2.67 },
-    { letter: "C+", min: 64, gpa: 2.33 },
-    { letter: "C", min: 60, gpa: 2.00 },
-    { letter: "C-", min: 55, gpa: 1.67 },
-    { letter: "D", min: 50, gpa: 1.00 },
-    { letter: "F", min: 0, gpa: 0.00 }
-]
+// UBC gradescheme is the default, and editor will prefill with it as an example
+export const DEFAULT_UBC_SCHEME: GradeScheme = {
+    name: 'UBC',
+    tiers: [
+        { letter: "A+", min: 90, gpa: 4.33 },
+        { letter: "A", min: 85, gpa: 4.00 },
+        { letter: "A-", min: 80, gpa: 3.67 },
+        { letter: "B+", min: 76, gpa: 3.33 },
+        { letter: "B", min: 72, gpa: 3.00 },
+        { letter: "B-", min: 68, gpa: 2.67 },
+        { letter: "C+", min: 64, gpa: 2.33 },
+        { letter: "C", min: 60, gpa: 2.00 },
+        { letter: "C-", min: 55, gpa: 1.67 },
+        { letter: "D", min: 50, gpa: 1.00 },
+        { letter: "F", min: 0, gpa: 0.00 }
+    ],
+};
 
-export function letterGradeLookup(percentage: number, scheme: GradeTier[] = DEFAULT_UBC_SCALE): { letter: string; gpa?: number } {
-    const rounded = Math.round(percentage);
-    const tier = scheme.find((tier: GradeTier) => rounded >= tier.min);
-    if (tier) {
-        if (!tier.gpa) return { letter: tier.letter }
-        return { letter: tier.letter, gpa: tier.gpa }
-    } else {
-        const last = scheme[scheme.length - 1];
-        if (!last.gpa) return { letter: last.letter }
-        return { letter: last.letter, gpa: last.gpa }
-    }
+export function lookupGrade(
+    percent: number,
+    scheme: GradeScheme = DEFAULT_UBC_SCHEME
+): { letter: string; gpa?: number } {
+    const sorted = [...scheme.tiers].sort((a, b) => b.min - a.min);
+    const match = sorted.find((tier) => percent >= tier.min) ?? sorted[sorted.length - 1];
+
+    return match ? { letter: match.letter, gpa: match.gpa } : { letter: 'F', gpa: 0 };
 }
 
 export function calculateSubcategoryStats(assignment: Assignment): {
@@ -145,8 +149,9 @@ export function calculateCourseStats(course: Course) {
         remainingWeight,
         requiredOnRemaining,
         hasGrades: completedWeight > 0,
-        ubcCurrent: letterGradeLookup(currentAverage, course.gradingScheme),
-        ubcGoal: letterGradeLookup(course.goalGrade, course.gradingScheme),
+        schemeName: course.gradeScheme?.name || 'UBC',
+        ubcCurrent: lookupGrade(currentAverage, course.gradeScheme),
+        ubcGoal: lookupGrade(course.goalGrade, course.gradeScheme),
     };
 }
 

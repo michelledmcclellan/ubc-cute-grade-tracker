@@ -13,6 +13,7 @@ import { CozyDropdown, type DropdownMenuKey } from './components/Dropdown';
 import { MASCOT_OPTIONS, MASCOTS, THEME_OPTIONS } from './constants';
 import { AssignmentRow } from './components/AssignmentRow';
 import { useDragReorder } from './hooks/useDragReorder';
+import { GradeSchemeModal } from './components/GradeSchemeModal';
 
 export default function App() {
   // 1. State: Load courses from localStorage when app opens
@@ -231,6 +232,9 @@ export default function App() {
 
   const courseTabDrag = useDragReorder(courses, setCourses);
 
+  // boolean state for wiring in the custom modal scheme
+
+  const [isSchemeModalOpen, setIsSchemeModalOpen] = useState(false);
 
   return (
     <div className="app-container">
@@ -438,8 +442,17 @@ export default function App() {
                 }
               />
               <span className="ubc-badge">
-                UBC {stats.ubcGoal.letter} {stats.ubcGoal.gpa !== undefined && ` (${stats.ubcGoal.gpa.toFixed(2)} GPA)`}
+                {stats.schemeName} {stats.ubcGoal.letter}
+                {stats.ubcGoal.gpa !== undefined && ` (${stats.ubcGoal.gpa.toFixed(2)} GPA)`}
               </span>
+              <button
+                type="button"
+                className="sub-action-btn"
+                onClick={() => setIsSchemeModalOpen(true)}
+                title="Customize grading scale for this course"
+              >
+                edit scale
+              </button>
             </div>
             <p className="remaining-note">
               Weight of remaining tasks: <strong>{stats.remainingWeight}%</strong> (completed: {stats.completedWeight}%)
@@ -466,6 +479,15 @@ export default function App() {
           </div>
         </section>
       </main>
+      {isSchemeModalOpen && (
+        <GradeSchemeModal
+          currentScheme={activeCourse.gradeScheme}
+          onSave={(scheme) =>
+            updateActiveCourse((c) => ({ ...c, gradeScheme: scheme }))
+          }
+          onClose={() => setIsSchemeModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

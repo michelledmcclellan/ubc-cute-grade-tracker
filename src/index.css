@@ -106,6 +106,57 @@ body {
   max-width: 680px;
 }
 
+/* =========================================
+   Reusable Cozy Primitives
+   ========================================= */
+.cozy-surface {
+  background-color: var(--card-bg);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 4px 4px 0px var(--border-dashed);
+}
+
+.cozy-input {
+  width: 100%;
+  min-width: 0;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--ink);
+  background-color: var(--bg-cream);
+  border: 1.5px solid var(--border-dashed);
+  border-radius: 6px;
+  padding: 0.4rem 0.55rem;
+  outline: none;
+}
+
+.cozy-input:focus {
+  border-color: var(--ink);
+  background-color: var(--accent-box);
+}
+
+.cozy-btn {
+  font-family: inherit;
+  font-size: 0.78rem;
+  color: var(--ink);
+  background: var(--bg-cream);
+  border: 1.5px dashed var(--border-dashed);
+  border-radius: 6px;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+
+.cozy-btn:hover {
+  background: var(--accent-box);
+  border-color: var(--ink);
+}
+
+.cozy-btn.primary {
+  background: var(--accent-highlight);
+  border: 1.5px solid var(--ink);
+  font-weight: 700;
+}
+
 /* Header & ASCII Mascot */
 .ascii-header {
   display: flex;
@@ -214,7 +265,7 @@ body {
   border-radius: 6px;
   background: var(--card-bg);
   width: 150px;
-  color: var(--ink)
+  color: var(--ink);
 }
 
 .new-course-form input:focus-visible {
@@ -369,11 +420,11 @@ body {
   border: 1.5px solid var(--ink);
   border-radius: 6px;
   background-color: var(--bg-cream);
-  color: var(--ink)
+  color: var(--ink);
 }
 
 .goal-input-group input:focus-visible {
-  background-color: (var(--accent-box));
+  background-color: var(--accent-box);
 }
 
 .ubc-badge {
@@ -437,8 +488,6 @@ body {
   font-size: 0.88rem;
   padding: 0.45rem 0.35rem;
 }
-
-
 
 .dropdown-toolbar {
   display: flex;
@@ -547,7 +596,6 @@ body {
 .name-cell input {
   flex: 1;
   min-width: 0;
-  /* Prevents flex input from overflowing the 1fr grid column */
 }
 
 .expand-btn {
@@ -658,7 +706,7 @@ body {
   cursor: default;
 }
 
-/* the new text paste buttons for transferring a new course from a friend */
+/* Course actions & inline import bar */
 .course-actions {
   display: flex;
   flex-wrap: wrap;
@@ -706,6 +754,7 @@ body {
   font-weight: 700;
 }
 
+/* Drag & Drop */
 .drag-handle {
   color: var(--ink-muted);
   cursor: grab;
@@ -723,7 +772,8 @@ body {
   transform: scale(1.15);
 }
 
-.assignment-group.is-dragging {
+.assignment-group.is-dragging,
+.tab.is-dragging {
   opacity: 0.45;
 }
 
@@ -735,4 +785,104 @@ body {
 .assignment-group.is-drag-over-below {
   border-bottom: 2px dashed var(--ink-muted);
   padding-bottom: 0.35rem;
+}
+
+.tab.is-drag-over-left {
+  border-left: 3px dashed var(--ink);
+}
+
+.tab.is-drag-over-right {
+  border-right: 3px dashed var(--ink);
+}
+
+/* Grade Scheme Modal Styling */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 100;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 1.1rem;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px dashed var(--border-dashed);
+}
+
+.scheme-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.scheme-name-row input {
+  flex: 1;
+}
+
+.scheme-table-header,
+.scheme-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 28px;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.scheme-table-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+  margin-bottom: 0.35rem;
+}
+
+.scheme-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-dashed) transparent;
+}
+
+.scheme-rows::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scheme-rows::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scheme-rows::-webkit-scrollbar-thumb {
+  background-color: var(--border-dashed);
+  border-radius: 999px;
+}
+
+.scheme-rows::-webkit-scrollbar-thumb:hover {
+  background-color: var(--ink-muted);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--border-dashed);
 }
