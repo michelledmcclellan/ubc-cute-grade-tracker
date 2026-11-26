@@ -39,13 +39,13 @@ export default function App() {
     localStorage.setItem('ubc_theme', theme);
 
     // Read the active --bg-cream CSS variable straight from the computed style
-    const bgCream = getComputedStyle(document.body)
-      .getPropertyValue('--bg-cream')
+    const accentHighlight = getComputedStyle(document.body)
+      .getPropertyValue('--accent-highlight')
       .trim();
 
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (metaThemeColor && bgCream) {
-      metaThemeColor.setAttribute('content', bgCream);
+    if (metaThemeColor && accentHighlight) {
+      metaThemeColor.setAttribute('content', accentHighlight);
     }
   }, [theme]);
 
