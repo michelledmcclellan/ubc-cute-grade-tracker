@@ -260,10 +260,9 @@ export default function App() {
         </pre>
         <div className="header-text">
           <div className="title-banner">
-            ┌──────────────────────────────┐
-            <br />│ ✿ UBC GRADE ESTIMATOR ✿                         │
-            <br />
-            └──────────────────────────────┘
+            {'┌──────────────────────────────┐\n'}
+            {'│ ✿ UBC GRADE ESTIMATOR ✿      │\n'}
+            {'└──────────────────────────────┘'}
           </div>
           <div className="speech-bubble">
             <span className="bubble-arrow">⟢ </span>
