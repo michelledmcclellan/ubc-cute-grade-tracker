@@ -327,7 +327,7 @@ export default function App() {
         <form onSubmit={handleAddCourse} className="new-course-form">
           <input
             type="text"
-            placeholder="+ new class (e.g. COGS 200)"
+            placeholder="+ new class˙⋆✮⋆˚࿔"
             value={newCourseName}
             onChange={(e) => setNewCourseName(e.target.value)}
           />
