@@ -618,8 +618,6 @@ body {
 .subcategory-drawer {
   margin-left: 2.35rem;
   margin-top: 0.45rem;
-  padding-left: 0.85rem;
-  border-left: 2px dashed var(--border-dashed);
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
@@ -632,6 +630,7 @@ body {
   gap: 0.75rem;
   font-size: 0.78rem;
   color: var(--ink-muted);
+  padding-left: 25px
 }
 
 .sub-action-btn {
@@ -677,9 +676,23 @@ body {
 
 .sub-item-row {
   display: grid;
-  grid-template-columns: minmax(120px, 233px) 85px 20px;
+  grid-template-columns: 16px minmax(120px, 285px) 85px 20px;
   gap: 0.5rem;
   align-items: center;
+}
+
+.sub-item-row.is-dragging {
+  opacity: 0.45;
+}
+
+.sub-item-row.is-drag-over-above {
+  border-top: 2px dashed var(--ink-muted);
+  padding-top: 0.25rem;
+}
+
+.sub-item-row.is-drag-over-below {
+  border-bottom: 2px dashed var(--ink-muted);
+  padding-bottom: 0.25rem;
 }
 
 .sub-item-row input {

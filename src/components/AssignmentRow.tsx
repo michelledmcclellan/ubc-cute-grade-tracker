@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { type Assignment, type SubItem, calculateSubcategoryStats } from '../grades';
-import { type DropPosition } from '../hooks/useDragReorder';
+import { useDragReorder, type DropPosition } from '../hooks/useDragReorder';
 
 
 interface AssignmentRowProps {
@@ -35,6 +35,7 @@ export function AssignmentRow({
 
     const hasSubItems = Boolean(row.subItems && row.subItems.length > 0);
     const subStats = hasSubItems ? calculateSubcategoryStats(row) : null;
+
     // adds new sub item to end of lsit
     const handleAddSubItem = () => {
         const current = row.subItems ?? [];
@@ -48,6 +49,7 @@ export function AssignmentRow({
         // Spread operator `[...current, nextItem]` creates a new array without mutating the old one
         onUpdateRow({ ...row, subItems: [...current, nextItem] });
     };
+
     // this is if you are editing the sub item name or grade
     const handleSubItemChange = (
         subId: string,
@@ -60,6 +62,7 @@ export function AssignmentRow({
         );
         onUpdateRow({ ...row, subItems: updatedSubs });
     };
+
     // removes a sub item, if it was the only sub item flattens back into a normal row
     const handleDeleteSubItem = (subId: string) => {
         // `.filter()` creates a new array keeping everything EXCEPT `subId`
@@ -72,6 +75,7 @@ export function AssignmentRow({
             onUpdateRow({ ...row, subItems: remaining });
         }
     };
+
     // updates the number of lowest grades to drop
     const handleDropLowestChange = (value: string) => {
         // `|| 0` handles when the user backspaces the box empty (NaN becomes 0)
@@ -87,6 +91,9 @@ export function AssignmentRow({
         const timer = setTimeout(() => setConfirmDelete(false), 3000);
         return () => clearTimeout(timer);
     }, [confirmDelete]);
+
+    // sub item draggability using hook
+    const subItemDrag = useDragReorder(row.subItems ?? [], (newSubs) => onUpdateRow({ ...row, subItems: newSubs }));
 
     return (
         <div
@@ -204,36 +211,54 @@ export function AssignmentRow({
 
                     {hasSubItems && (
                         <div className="sub-item-list">
-                            {(row.subItems ?? []).map((sub) => (
-                                <div key={sub.id} className="sub-item-row">
-                                    <input
-                                        type="text"
-                                        placeholder="Sub-item name"
-                                        value={sub.name}
-                                        onChange={(e) => handleSubItemChange(sub.id, 'name', e.target.value)}
-                                    />
-                                    <input
-                                        type={row.isHidden ? 'text' : 'number'}
-                                        className={row.isHidden ? 'is-hidden' : ''}
-                                        placeholder="--"
-                                        readOnly={Boolean(row.isHidden)}
-                                        value={row.isHidden ? '⟢ ฅ՞•ﻌ•՞ฅ' : sub.grade}
-                                        onChange={(e) => {
-                                            if (!row.isHidden) {
-                                                handleSubItemChange(sub.id, 'grade', e.target.value);
-                                            }
-                                        }}
-                                    />
-                                    <button
-                                        type="button"
-                                        className="remove-row-btn"
-                                        onClick={() => handleDeleteSubItem(sub.id)}
-                                        title="Remove sub-item"
+                            {(row.subItems ?? []).map((sub, subIndex) => {
+                                const { isDragging, dropPosition, ...subDragHandlers } = subItemDrag.getItemProps(subIndex);
+
+                                return (
+                                    <div key={sub.id} className={`sub-item-row ${isDragging ? 'is-dragging' : ''} ${dropPosition === 'before' ? 'is-drag-over-above' : ''
+                                        } ${dropPosition === 'after' ? 'is-drag-over-below' : ''}`}
+                                        onDragOver={subDragHandlers.onDragOver}
+                                        onDrop={subDragHandlers.onDrop}
                                     >
-                                        [x]
-                                    </button>
-                                </div>
-                            ))}
+                                        <span
+                                            className="drag-handle"
+                                            draggable
+                                            onDragStart={subDragHandlers.onDragStart}
+                                            onDragEnd={subDragHandlers.onDragEnd}
+                                            title="Drag to reorder sub-item"
+                                        >
+                                            ⊹
+                                        </span>
+                                        <input
+                                            type="text"
+                                            placeholder="Sub-item name"
+                                            value={sub.name}
+                                            onChange={(e) => handleSubItemChange(sub.id, 'name', e.target.value)}
+                                        />
+                                        <input
+                                            type={row.isHidden ? 'text' : 'number'}
+                                            className={row.isHidden ? 'is-hidden' : ''}
+                                            placeholder="--"
+                                            readOnly={Boolean(row.isHidden)}
+                                            value={row.isHidden ? '⟢ ฅ՞•ﻌ•՞ฅ' : sub.grade}
+                                            onChange={(e) => {
+                                                if (!row.isHidden) {
+                                                    handleSubItemChange(sub.id, 'grade', e.target.value);
+                                                }
+                                            }}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="remove-row-btn"
+                                            onClick={() => handleDeleteSubItem(sub.id)}
+                                            title="Remove sub-item"
+                                        >
+                                            [x]
+                                        </button>
+                                    </div>
+                                )
+                            }
+                            )}
                         </div>
                     )}
                 </div>

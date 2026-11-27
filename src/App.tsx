@@ -38,7 +38,7 @@ export default function App() {
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('ubc_theme', theme);
 
-    // Read the active --bg-cream CSS variable straight from the computed style
+    // Read the active --accent-highlight CSS variable straight from the computed style
     const accentHighlight = getComputedStyle(document.body)
       .getPropertyValue('--accent-highlight')
       .trim();
