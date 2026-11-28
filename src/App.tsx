@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type SyntheticEvent } from 'react';
 import {
   type Course,
   type Assignment,
@@ -16,13 +16,11 @@ import { useDragReorder } from './hooks/useDragReorder';
 import { GradeSchemeModal } from './components/GradeSchemeModal';
 
 export default function App() {
-  // 1. State: Load courses from localStorage when app opens
   const [courses, setCourses] = useState<Course[]>(() => loadCourses());
   const [activeCourseId, setActiveCourseId] = useState<string>(courses[0]?.id || '');
   const [newCourseName, setNewCourseName] = useState('');
   const [openMenu, setOpenMenu] = useState<DropdownMenuKey>(null);
 
-  // added mascot funcitonality
   const [mascot, setMascot] = useState<string>(
     () => localStorage.getItem('ubc_mascot') || 'bunny'
   )
@@ -38,7 +36,6 @@ export default function App() {
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('ubc_theme', theme);
 
-    // Read the active --accent-highlight CSS variable straight from the computed style
     const accentHighlight = getComputedStyle(document.body)
       .getPropertyValue('--accent-highlight')
       .trim();
@@ -59,7 +56,6 @@ export default function App() {
     localStorage.setItem('ubc_mascot', nextMascot);
   };
 
-  // 2. Effect: Auto-save to localStorage whenever courses change
   useEffect(() => {
     saveCourses(courses);
   }, [courses]);
@@ -67,14 +63,12 @@ export default function App() {
   const activeCourse = courses.find((c) => c.id === activeCourseId) || courses[0];
   const stats = calculateCourseStats(activeCourse);
 
-  // Helper to update the currently selected course immutably
+  // immutable
   const updateActiveCourse = (updater: (course: Course) => Course) => {
     setCourses((prev) =>
       prev.map((c) => (c.id === activeCourse.id ? updater(c) : c))
     );
   };
-
-  // Update a single cell in the assignment table
   const handleAssignmentChange = (
     id: string,
     field: keyof Assignment,
@@ -88,7 +82,6 @@ export default function App() {
     }));
   };
 
-  // Add a blank assignment row
   const handleAddRow = () => {
     updateActiveCourse((course) => ({
       ...course,
@@ -99,7 +92,6 @@ export default function App() {
     }));
   };
 
-  // Delete an assignment row
   const handleDeleteRow = (id: string) => {
     updateActiveCourse((course) => ({
       ...course,
@@ -107,7 +99,6 @@ export default function App() {
     }));
   };
 
-  // Update an assignment row
   const handleUpdateRow = (updatedRow: Assignment) => {
     updateActiveCourse((course) => ({
       ...course,
@@ -117,8 +108,7 @@ export default function App() {
     }));
   };
 
-  // Add a new class tab
-  const handleAddCourse = (e: React.FormEvent) => {
+  const handleAddCourse = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!newCourseName.trim()) return;
     const newCourse: Course = {
@@ -136,9 +126,8 @@ export default function App() {
     setNewCourseName('');
   };
 
-  // Delete a class tab
   const handleDeleteCourse = (id: string) => {
-    if (courses.length <= 1) return; // Keep at least one course
+    if (courses.length <= 1) return; // minimum one course at all times
     const filtered = courses.filter((c) => c.id !== id);
     setCourses(filtered);
     if (activeCourseId === id) {
@@ -146,7 +135,7 @@ export default function App() {
     }
   };
 
-  // Toggle visibility of your grades
+  // course wont be visible, but still calculated
   const handleToggleVisibility = (id: string) => {
     updateActiveCourse((course) => ({
       ...course,
@@ -156,7 +145,6 @@ export default function App() {
     }));
   };
 
-  // Cute bunny reaction message based on stats
   const getBunnyMessage = () => {
     if (!stats.hasGrades) return 'type in some grades & weights to start! ⋆｡°✩';
     if (stats.remainingWeight === 0) {
@@ -174,24 +162,17 @@ export default function App() {
     return `you got this!! you need ${stats.requiredOnRemaining.toFixed(1)}% on the remaining ${stats.remainingWeight}% to hit ${activeCourse.goalGrade}% (${stats.ubcGoal.letter}) (๑°꒵°๑)･*♡`;
   };
 
-  // Added an export/import course template functionality
-
-
-  //inline paste bar functionality
-
   const [isImporting, setIsImporting] = useState(false);
   const [importText, setImportText] = useState('');
 
 
-  //handler that copies the template 
   const handleCopyTemplate = async () => {
     const json = exportCourseTemplate(activeCourse);
     await navigator.clipboard.writeText(json);
     showMascotMessage(`Copied ${activeCourse.code} syllabus to clipboard! ദ്ദി(｡•̀ ,<)~✩‧₊`)
   }
 
-  // the handler for pasting the template in
-  const handleImportSubmit = (event: React.FormEvent) => {
+  const handleImportSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!importText.trim()) return;
 
@@ -208,7 +189,6 @@ export default function App() {
     showMascotMessage(`imported ${imported.code}!! ready to calculate some grades ₍₍⚞(˶˃ ᗜ ˂˶)⚟⁾⁾`)
   }
 
-  // helper to put a temporary message into the mascot speech bubble
 
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
@@ -219,9 +199,7 @@ export default function App() {
     }, 4000); // Reverts to the default mascot message after 4 seconds
   }
 
-  //course tab delete confirmation
-
-  //tracks the course id curently waiting to be confirmed
+  // need to remember which course delete id is being confirmed for the alloted time period
   const [confirmDeleteCourseId, setConfirmDeleteCourseId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -230,7 +208,6 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [confirmDeleteCourseId]);
 
-  // assignment drag using hook calls
 
   const assignmentDrag = useDragReorder(
     activeCourse.assignments,
@@ -238,11 +215,7 @@ export default function App() {
       updateActiveCourse((course) => ({ ...course, assignments: newAssignments }))
   );
 
-  // course drag using hook call
-
   const courseTabDrag = useDragReorder(courses, setCourses);
-
-  // boolean state for wiring in the custom modal scheme
 
   const [isSchemeModalOpen, setIsSchemeModalOpen] = useState(false);
 

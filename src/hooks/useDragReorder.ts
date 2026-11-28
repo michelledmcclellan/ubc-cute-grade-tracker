@@ -3,8 +3,6 @@ import { reorderList } from "../grades";
 
 export type DropPosition = 'before' | 'after' | null;
 
-//generic type, so I can use it on assignment, course, & subassignments easier
-
 export function useDragReorder<T>(
     items: T[],
     onReorder: (newItems: T[]) => void

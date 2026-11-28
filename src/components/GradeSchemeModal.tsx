@@ -26,7 +26,6 @@ export function GradeSchemeModal({
                 if (i !== index) return row;
                 if (field === 'letter') return { ...row, letter: rawValue };
                 if (field === 'min') return { ...row, min: Number(rawValue) || 0 };
-                // Optional GPA: blank string becomes undefined
                 return { ...row, gpa: rawValue.trim() === '' ? undefined : Number(rawValue) };
             })
         );

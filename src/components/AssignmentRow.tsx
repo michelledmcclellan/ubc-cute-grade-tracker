@@ -36,7 +36,6 @@ export function AssignmentRow({
     const hasSubItems = Boolean(row.subItems && row.subItems.length > 0);
     const subStats = hasSubItems ? calculateSubcategoryStats(row) : null;
 
-    // adds new sub item to end of lsit
     const handleAddSubItem = () => {
         const current = row.subItems ?? [];
         const baseName = row.name.trim() || 'Item';
@@ -46,26 +45,21 @@ export function AssignmentRow({
             grade: '',
         };
 
-        // Spread operator `[...current, nextItem]` creates a new array without mutating the old one
         onUpdateRow({ ...row, subItems: [...current, nextItem] });
     };
 
-    // this is if you are editing the sub item name or grade
     const handleSubItemChange = (
         subId: string,
         field: 'name' | 'grade',
         value: string
     ) => {
-        // `.map()` returns a brand-new array, swapping only the matching sub-item
         const updatedSubs = (row.subItems ?? []).map((sub) =>
             sub.id === subId ? { ...sub, [field]: value } : sub
         );
         onUpdateRow({ ...row, subItems: updatedSubs });
     };
 
-    // removes a sub item, if it was the only sub item flattens back into a normal row
     const handleDeleteSubItem = (subId: string) => {
-        // `.filter()` creates a new array keeping everything EXCEPT `subId`
         const remaining = (row.subItems ?? []).filter((sub) => sub.id !== subId);
 
         if (remaining.length === 0) {
@@ -76,14 +70,12 @@ export function AssignmentRow({
         }
     };
 
-    // updates the number of lowest grades to drop
     const handleDropLowestChange = (value: string) => {
-        // `|| 0` handles when the user backspaces the box empty (NaN becomes 0)
+        // if box is empty autofills empty
         const num = Math.max(0, parseInt(value, 10) || 0);
         onUpdateRow({ ...row, dropLowest: num });
     };
 
-    //double check you actually want to delete a course
     const [confirmDelete, setConfirmDelete] = useState(false);
 
     useEffect(() => {
@@ -92,7 +84,6 @@ export function AssignmentRow({
         return () => clearTimeout(timer);
     }, [confirmDelete]);
 
-    // sub item draggability using hook
     const subItemDrag = useDragReorder(row.subItems ?? [], (newSubs) => onUpdateRow({ ...row, subItems: newSubs }));
 
     return (

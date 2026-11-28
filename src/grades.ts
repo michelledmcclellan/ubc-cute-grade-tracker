@@ -6,7 +6,7 @@ export interface Assignment {
     weight: string;
     isHidden?: boolean;
     subItems?: SubItem[];
-    dropLowest?: number; // add a best case vs assuming these courses are kept (drops your current lowest, and then assumes your lowest are still kept when you have not finished yet)
+    dropLowest?: number;
 }
 
 export interface Course {
@@ -17,19 +17,17 @@ export interface Course {
     gradeScheme?: GradeScheme;
 }
 
-// functionality for a custom grade scheme
 export interface GradeTier {
-    letter: string // A+,, A, A-, B, C, etc, required
-    min: number; // range, for ex 90, required
-    gpa?: number; // number gpa for a given letter, optional in case some dont track gpa
+    letter: string
+    min: number;
+    gpa?: number;
 }
 
 export interface GradeScheme {
-    name: string; // UBC, 4.0, UT, etc
+    name: string;
     tiers: GradeTier[]; // sorted highest min to lowest min
 }
 
-// functionality for subcategories of items
 export interface SubItem {
     id: string;
     name: string;
@@ -37,7 +35,7 @@ export interface SubItem {
     isHidden?: boolean;
 }
 
-// UBC gradescheme is the default, and editor will prefill with it as an example
+// Editor modal prefills default as an example
 export const DEFAULT_UBC_SCHEME: GradeScheme = {
     name: 'UBC',
     tiers: [
@@ -84,7 +82,6 @@ export function calculateSubcategoryStats(assignment: Assignment): {
     const targetCount = Math.max(1, items.length - dropCount);
     const weightPerItem = totalWeight / targetCount;
 
-    // 1. Extract valid numeric grades (ignores blank "", keeps "0")
     const validGrades = items
         .map((item) => parseFloat(item.grade))
         .filter((g) => !isNaN(g));
@@ -93,14 +90,11 @@ export function calculateSubcategoryStats(assignment: Assignment): {
         return { earnedPoints: 0, completedWeight: 0, average: null, countedCount: 0 };
     }
 
-    // 2. Sort ascending so the lowest grades are at the front
     validGrades.sort((a, b) => a - b);
 
-    // 3. Only drop once we have more graded items than dropCount
     const countedGrades =
         validGrades.length > dropCount ? validGrades.slice(dropCount) : validGrades;
 
-    // 4. Compute final stats from the counted grades
     const sum = countedGrades.reduce((acc, g) => acc + g, 0);
     const average = sum / countedGrades.length;
     const completedWeight = Math.min(totalWeight, countedGrades.length * weightPerItem);
@@ -114,7 +108,6 @@ export function calculateSubcategoryStats(assignment: Assignment): {
     };
 }
 
-// 3. Weighted Grade Math
 export function calculateCourseStats(course: Course) {
     let earnedPoints = 0;
     let completedWeight = 0;
@@ -138,7 +131,6 @@ export function calculateCourseStats(course: Course) {
     const currentAverage = completedWeight > 0 ? (earnedPoints / completedWeight) * 100 : 0;
     const remainingWeight = Math.max(0, 100 - completedWeight);
 
-    // What grade do you need on the remaining tasks to reach goalGrade?
     const requiredOnRemaining =
         remainingWeight > 0 ? ((course.goalGrade - earnedPoints) / remainingWeight) * 100 : 0;
 
@@ -155,7 +147,6 @@ export function calculateCourseStats(course: Course) {
     };
 }
 
-// 4. LocalStorage Persistence & Starter Course
 const STORAGE_KEY = 'ubc_ascii_grade_tracker_v1';
 
 export const DEFAULT_COURSES: Course[] = [
@@ -187,9 +178,6 @@ export function saveCourses(courses: Course[]): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(courses));
 }
 
-// added for exporting a course to friends
-
-// converts a course into JSON string, removes grades while doing so
 export function exportCourseTemplate(course: Course): string {
     const cleanedCourse: Course = {
         ...course,
@@ -197,7 +185,7 @@ export function exportCourseTemplate(course: Course): string {
             ...assignment,
             grade: '', //empty grades for each instead of keeping those of the one sharing
             isHidden: false, //no need to hide when there are no grades
-            subItems: assignment.subItems?.map((sub) => ({ //do the same thing to the sub items
+            subItems: assignment.subItems?.map((sub) => ({
                 ...sub,
                 grade: '',
             }))
@@ -206,7 +194,7 @@ export function exportCourseTemplate(course: Course): string {
     return JSON.stringify(cleanedCourse, null, 2);
 }
 
-//parses a pasted in JSON string, assigns new IDs to be certain that nothing crashes
+// New IDs assigned to avoid issues
 export function importCourseTemplate(jsonString: string): Course | null {
     try {
         const parsed = JSON.parse(jsonString)
@@ -233,7 +221,7 @@ export function importCourseTemplate(jsonString: string): Course | null {
     }
 }
 
-// helper for reordering, works for courses and classes hence the generic type
+// for drag and drop
 export function reorderList<T>(list: T[], fromIndex: number, toIndex: number): T[] {
     if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return list;
     const result = [...list]
